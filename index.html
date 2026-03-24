@@ -1,831 +1,324 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BRAINROT EMPORIUM 🧠</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Russo+One&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --neon-purple: #bf00ff;
-    --neon-green: #39ff14;
-    --neon-pink: #ff006e;
-    --neon-yellow: #ffe600;
-    --neon-cyan: #00f5ff;
-    --bg-dark: #0a0010;
-    --bg-mid: #110020;
-    --card-bg: #1a0030;
-    --text-main: #f0e6ff;
-    --glitch-1: #ff006e;
-    --glitch-2: #00f5ff;
-  }
+:root {
+  --neon-purple: #bf00ff; --neon-green: #39ff14; --neon-pink: #ff006e;
+  --neon-yellow: #ffe600; --neon-cyan: #00f5ff;
+  --bg-dark: #0a0010; --bg-mid: #110020; --card-bg: #1a0030; --text-main: #f0e6ff;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { background:var(--bg-dark); color:var(--text-main); font-family:'Space Mono',monospace; overflow-x:hidden; }
+body::before {
+  content:''; position:fixed; inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.12) 2px,rgba(0,0,0,0.12) 4px);
+  pointer-events:none; z-index:9998;
+}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+/* NAV */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:300;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:14px 40px; background:rgba(10,0,16,0.92);
+  backdrop-filter:blur(12px); border-bottom:2px solid var(--neon-purple);
+  box-shadow:0 0 30px rgba(191,0,255,0.3);
+}
+.nav-logo { font-family:'Russo One',sans-serif; font-size:1.4rem; color:var(--neon-green); text-shadow:0 0 10px var(--neon-green); animation:flicker 5s infinite; letter-spacing:2px; }
+.nav-links { display:flex; gap:26px; list-style:none; }
+.nav-links a { color:var(--text-main); text-decoration:none; font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; transition:color 0.2s; }
+.nav-links a:hover { color:var(--neon-pink); }
+.admin-nav-btn {
+  font-family:'Space Mono',monospace; font-size:0.68rem; padding:8px 16px;
+  border:1px solid rgba(255,230,0,0.35); border-radius:50px; cursor:pointer;
+  background:transparent; color:var(--neon-yellow); letter-spacing:1px; transition:border-color 0.2s,box-shadow 0.2s;
+}
+.admin-nav-btn:hover { border-color:var(--neon-yellow); box-shadow:0 0 10px rgba(255,230,0,0.3); }
 
-  html { scroll-behavior: smooth; }
+/* HERO */
+.hero {
+  min-height:100vh; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; text-align:center;
+  padding:120px 20px 60px; position:relative; overflow:hidden;
+}
+.hero-grid {
+  position:absolute; inset:0;
+  background-image:linear-gradient(rgba(191,0,255,0.12) 1px,transparent 1px),linear-gradient(90deg,rgba(191,0,255,0.12) 1px,transparent 1px);
+  background-size:50px 50px; animation:gridScroll 8s linear infinite;
+}
+@keyframes gridScroll { 0%{background-position:0 0} 100%{background-position:50px 50px} }
+.orb { position:absolute; border-radius:50%; filter:blur(80px); opacity:0.22; animation:floatOrb 6s ease-in-out infinite; }
+.orb-1 { width:400px; height:400px; background:var(--neon-purple); top:-100px; left:-100px; }
+.orb-2 { width:300px; height:300px; background:var(--neon-pink); bottom:-80px; right:5%; animation-delay:-3s; }
+.orb-3 { width:250px; height:250px; background:var(--neon-green); top:40%; left:60%; animation-delay:-1.5s; }
+@keyframes floatOrb { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-30px)} }
+.hero-badge {
+  display:inline-block; background:var(--neon-green); color:#000;
+  font-family:'Boogaloo',cursive; font-size:0.9rem; padding:6px 18px;
+  border-radius:50px; margin-bottom:24px; letter-spacing:2px; text-transform:uppercase;
+  animation:badgePulse 2s ease-in-out infinite; position:relative; z-index:2;
+}
+@keyframes badgePulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
+.hero-title { font-family:'Russo One',sans-serif; font-size:clamp(3.5rem,10vw,9rem); line-height:0.95; position:relative; z-index:2; margin-bottom:20px; }
+.hero-title .line1 { color:var(--neon-pink); display:block; animation:glitchText 3s infinite; }
+.hero-title .line2 { color:#fff; display:block; }
+.hero-title .line3 { color:var(--neon-green); display:block; animation:glitchText 3s 0.5s infinite; }
+@keyframes glitchText {
+  0%,90%,100%{transform:none;text-shadow:none}
+  92%{transform:skewX(-5deg) translateX(-4px);text-shadow:4px 0 #00f5ff,-4px 0 #ff006e}
+  94%{transform:skewX(3deg) translateX(4px);text-shadow:-4px 0 #00f5ff,4px 0 #ff006e}
+  96%{transform:none}
+}
+.hero-sub { font-size:clamp(0.85rem,2vw,1.1rem); color:rgba(240,230,255,0.7); max-width:520px; line-height:1.7; position:relative; z-index:2; margin-bottom:40px; }
+.hero-cta { font-family:'Boogaloo',cursive; font-size:1.4rem; padding:16px 44px; border:none; border-radius:60px; cursor:pointer; background:linear-gradient(135deg,var(--neon-pink),var(--neon-purple)); color:#fff; box-shadow:0 0 30px rgba(255,0,110,0.5); transition:transform 0.2s cubic-bezier(.34,1.56,.64,1),box-shadow 0.2s; position:relative; z-index:2; }
+.hero-cta:hover { transform:scale(1.1) rotate(-1deg); box-shadow:0 0 50px rgba(255,0,110,0.8); }
+.hero-scroll { position:absolute; bottom:30px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:6px; color:rgba(240,230,255,0.4); font-size:0.65rem; letter-spacing:2px; z-index:2; animation:scrollBounce 2s ease-in-out infinite; }
+@keyframes scrollBounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
 
-  body {
-    background: var(--bg-dark);
-    color: var(--text-main);
-    font-family: 'Space Mono', monospace;
-    overflow-x: hidden;
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='12' cy='12' r='8' fill='%23bf00ff' opacity='0.8'/%3E%3C/svg%3E") 12 12, auto;
-  }
+/* MARQUEE */
+.marquee-wrap { background:var(--neon-green); padding:13px 0; overflow:hidden; border-top:3px solid #000; border-bottom:3px solid #000; }
+.marquee-track { display:flex; white-space:nowrap; animation:marquee 14s linear infinite; }
+.marquee-item { font-family:'Boogaloo',cursive; font-size:1.3rem; color:#000; padding:0 28px; }
+@keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
 
-  /* ===== SCANLINES OVERLAY ===== */
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0,0,0,0.15) 2px,
-      rgba(0,0,0,0.15) 4px
-    );
-    pointer-events: none;
-    z-index: 9998;
-  }
+/* SECTIONS */
+section { padding:90px 40px; }
+.section-title { font-family:'Russo One',sans-serif; font-size:clamp(2rem,5vw,3.2rem); text-align:center; margin-bottom:12px; }
+.section-sub { text-align:center; color:rgba(240,230,255,0.55); font-size:0.8rem; margin-bottom:55px; letter-spacing:1px; }
 
-  /* ===== NOISE TEXTURE ===== */
-  body::after {
-    content: '';
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    opacity: 0.03;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9997;
-  }
+/* PRODUCTS */
+.products { background:var(--bg-mid); }
+.products .section-title { color:var(--neon-pink); text-shadow:0 0 20px rgba(255,0,110,0.35); }
+.product-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:26px; max-width:1200px; margin:0 auto; }
+.empty-store { text-align:center; padding:60px 20px; color:rgba(240,230,255,0.4); grid-column:1/-1; }
+.empty-store .empty-icon { font-size:4rem; margin-bottom:16px; }
+.empty-store p { font-family:'Boogaloo',cursive; font-size:1.3rem; }
+.product-card { background:var(--card-bg); border:1px solid rgba(191,0,255,0.25); border-radius:20px; overflow:hidden; position:relative; transition:transform 0.3s cubic-bezier(.34,1.56,.64,1),border-color 0.3s,box-shadow 0.3s; }
+.product-card:not(.sold-out):hover { transform:translateY(-10px) rotate(-1deg) scale(1.02); border-color:var(--neon-purple); box-shadow:0 20px 50px rgba(191,0,255,0.35); }
+.product-card:not(.sold-out):nth-child(even):hover { transform:translateY(-10px) rotate(1deg) scale(1.02); }
+.card-img { width:100%; height:210px; object-fit:cover; display:block; }
+.card-img-placeholder { width:100%; height:210px; display:flex; align-items:center; justify-content:center; font-size:5rem; background:linear-gradient(135deg,#1a0030,#3d0070); }
+.sold-out-overlay { position:absolute; inset:0; background:rgba(0,0,0,0.7); display:flex; align-items:center; justify-content:center; z-index:2; border-radius:20px; }
+.sold-out-label { font-family:'Russo One',sans-serif; font-size:1.2rem; color:#fff; background:rgba(255,0,110,0.85); padding:10px 24px; border-radius:50px; }
+.card-body { padding:18px; }
+.card-tag { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color:var(--neon-purple); margin-bottom:6px; }
+.card-name { font-family:'Boogaloo',cursive; font-size:1.5rem; margin-bottom:6px; }
+.card-desc { font-size:0.75rem; color:rgba(240,230,255,0.6); line-height:1.6; margin-bottom:16px; }
+.card-footer { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.card-left { display:flex; flex-direction:column; gap:3px; }
+.card-price { font-family:'Russo One',sans-serif; font-size:1.4rem; color:var(--neon-green); text-shadow:0 0 10px rgba(57,255,20,0.35); }
+.card-stock { font-size:0.65rem; color:rgba(240,230,255,0.45); }
+.buy-btn { font-family:'Boogaloo',cursive; font-size:1rem; padding:10px 20px; border:none; border-radius:50px; cursor:pointer; background:linear-gradient(135deg,var(--neon-purple),var(--neon-pink)); color:#fff; box-shadow:0 0 12px rgba(191,0,255,0.4); transition:transform 0.2s cubic-bezier(.34,1.56,.64,1),box-shadow 0.2s; }
+.buy-btn:hover { transform:scale(1.1); box-shadow:0 0 25px rgba(191,0,255,0.7); }
+.buy-btn:disabled { opacity:0.35; cursor:not-allowed; transform:none; }
 
-  /* ===== NAV ===== */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 40px;
-    background: rgba(10,0,16,0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 2px solid var(--neon-purple);
-    box-shadow: 0 0 30px rgba(191,0,255,0.3);
-  }
+/* TRUST */
+.trust { background:var(--bg-dark); }
+.trust .section-title { color:var(--neon-cyan); text-shadow:0 0 20px rgba(0,245,255,0.35); }
+.trust-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:22px; max-width:1100px; margin:0 auto; }
+.trust-card { background:var(--card-bg); border:1px solid rgba(0,245,255,0.18); border-radius:20px; padding:34px 26px; text-align:center; transition:transform 0.3s,border-color 0.3s,box-shadow 0.3s; position:relative; overflow:hidden; }
+.trust-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--neon-cyan),var(--neon-purple)); opacity:0; transition:opacity 0.3s; }
+.trust-card:hover { transform:translateY(-8px); border-color:var(--neon-cyan); box-shadow:0 10px 40px rgba(0,245,255,0.12); }
+.trust-card:hover::before { opacity:1; }
+.trust-icon { font-size:2.8rem; margin-bottom:14px; display:block; }
+.trust-label { font-family:'Boogaloo',cursive; font-size:1.2rem; color:var(--neon-cyan); margin-bottom:10px; }
+.trust-text { font-size:0.78rem; color:rgba(240,230,255,0.55); line-height:1.7; }
 
-  .nav-logo {
-    font-family: 'Russo One', sans-serif;
-    font-size: 1.5rem;
-    color: var(--neon-green);
-    text-shadow: 0 0 10px var(--neon-green), 0 0 20px var(--neon-green);
-    letter-spacing: 2px;
-    animation: flicker 4s infinite;
-  }
+/* PAYMENT INFO */
+.payinfo { background:var(--bg-mid); }
+.payinfo .section-title { color:var(--neon-yellow); text-shadow:0 0 20px rgba(255,230,0,0.35); }
+.payinfo-inner { max-width:780px; margin:0 auto; background:var(--card-bg); border:2px solid rgba(255,230,0,0.25); border-radius:28px; padding:46px 40px; text-align:center; }
+.pay-methods { display:flex; justify-content:center; flex-wrap:wrap; gap:14px; margin:28px 0; }
+.pay-pill { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12); border-radius:50px; padding:11px 22px; font-family:'Boogaloo',cursive; font-size:1.05rem; display:flex; align-items:center; gap:8px; transition:transform 0.2s,border-color 0.2s; }
+.pay-pill:hover { transform:scale(1.06); border-color:var(--neon-yellow); }
+.payinfo-note { font-size:0.78rem; color:rgba(240,230,255,0.5); max-width:480px; margin:0 auto; line-height:1.7; }
 
-  .nav-links { display: flex; gap: 28px; list-style: none; }
-  .nav-links a {
-    color: var(--text-main);
-    text-decoration: none;
-    font-size: 0.8rem;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    transition: color 0.2s, text-shadow 0.2s;
-  }
-  .nav-links a:hover {
-    color: var(--neon-pink);
-    text-shadow: 0 0 8px var(--neon-pink);
-  }
+/* FOOTER */
+footer { background:#000; border-top:2px solid var(--neon-purple); padding:36px 40px; text-align:center; }
+.footer-logo { font-family:'Russo One',sans-serif; font-size:1.8rem; color:var(--neon-purple); text-shadow:0 0 15px var(--neon-purple); margin-bottom:14px; }
+.footer-links { display:flex; justify-content:center; gap:22px; flex-wrap:wrap; margin-bottom:20px; }
+.footer-links a { color:rgba(240,230,255,0.45); text-decoration:none; font-size:0.72rem; letter-spacing:1px; transition:color 0.2s; }
+.footer-links a:hover { color:var(--neon-pink); }
+.footer-copy { font-size:0.68rem; color:rgba(240,230,255,0.28); }
+@keyframes flicker { 0%,95%,100%{opacity:1} 96%{opacity:0.3} 97%{opacity:1} 98%{opacity:0.5} 99%{opacity:1} }
 
-  .cart-btn {
-    background: var(--neon-purple);
-    color: #fff;
-    border: none;
-    padding: 10px 22px;
-    font-family: 'Boogaloo', cursive;
-    font-size: 1.1rem;
-    border-radius: 50px;
-    cursor: pointer;
-    box-shadow: 0 0 15px rgba(191,0,255,0.6);
-    transition: transform 0.15s, box-shadow 0.15s;
-  }
-  .cart-btn:hover {
-    transform: scale(1.08) rotate(-2deg);
-    box-shadow: 0 0 30px rgba(191,0,255,0.9);
-  }
+/* MODALS */
+.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.88); backdrop-filter:blur(12px); z-index:500; display:flex; align-items:center; justify-content:center; padding:20px; opacity:0; pointer-events:none; transition:opacity 0.3s; }
+.modal-overlay.active { opacity:1; pointer-events:all; }
+.modal { background:var(--card-bg); border:2px solid var(--neon-purple); border-radius:28px; padding:38px; max-width:480px; width:100%; box-shadow:0 0 80px rgba(191,0,255,0.45); transform:scale(0.9) translateY(20px); transition:transform 0.3s cubic-bezier(.34,1.56,.64,1); position:relative; max-height:90vh; overflow-y:auto; }
+.modal-overlay.active .modal { transform:scale(1) translateY(0); }
+.modal-close { position:absolute; top:14px; right:18px; background:none; border:none; color:rgba(240,230,255,0.45); font-size:1.4rem; cursor:pointer; transition:color 0.2s; }
+.modal-close:hover { color:var(--neon-pink); }
+.modal-title { font-family:'Russo One',sans-serif; font-size:1.6rem; color:var(--neon-green); margin-bottom:4px; }
+.modal-subtitle { font-size:0.78rem; color:rgba(240,230,255,0.5); margin-bottom:28px; }
+.modal-product-preview { display:flex; align-items:center; gap:16px; background:rgba(255,255,255,0.04); border:1px solid rgba(191,0,255,0.2); border-radius:16px; padding:16px; margin-bottom:28px; }
+.modal-product-img { width:64px; height:64px; object-fit:cover; border-radius:10px; }
+.modal-product-placeholder { width:64px; height:64px; border-radius:10px; background:linear-gradient(135deg,#2a0050,#5a0090); display:flex; align-items:center; justify-content:center; font-size:2rem; flex-shrink:0; }
+.modal-product-name { font-family:'Boogaloo',cursive; font-size:1.2rem; }
+.modal-product-price { font-family:'Russo One',sans-serif; color:var(--neon-green); font-size:1.1rem; }
+.payment-options { display:flex; flex-direction:column; gap:12px; margin-bottom:20px; }
+.pay-option { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:16px; padding:16px 20px; cursor:pointer; display:flex; align-items:center; gap:16px; transition:border-color 0.2s,background 0.2s,transform 0.2s; color:var(--text-main); }
+.pay-option:hover { border-color:var(--neon-purple); background:rgba(191,0,255,0.08); transform:translateX(5px); }
+.pay-option-icon { font-size:2rem; flex-shrink:0; }
+.pay-option-name { font-family:'Boogaloo',cursive; font-size:1.15rem; }
+.pay-option-detail { font-size:0.68rem; color:rgba(240,230,255,0.45); margin-top:2px; }
+.pay-option-arrow { color:rgba(240,230,255,0.3); font-size:1rem; margin-left:auto; }
+.modal-note { font-size:0.7rem; color:rgba(240,230,255,0.35); text-align:center; line-height:1.6; padding-top:16px; border-top:1px solid rgba(191,0,255,0.2); }
 
-  /* ===== HERO ===== */
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    position: relative;
-    padding: 120px 20px 60px;
-    overflow: hidden;
-  }
+/* PAYMENT DETAIL BOX */
+.pd-box { border-radius:16px; padding:24px; text-align:center; margin:24px 0; }
+.pd-label { font-size:0.65rem; letter-spacing:1px; color:rgba(240,230,255,0.45); margin-bottom:6px; text-transform:uppercase; }
+.pd-value { font-family:'Space Mono',monospace; font-size:1rem; color:var(--neon-cyan); margin-bottom:16px; word-break:break-all; }
+.pd-amount { font-family:'Russo One',sans-serif; font-size:2.2rem; color:var(--neon-green); }
+.pd-ref { font-size:0.75rem; color:rgba(240,230,255,0.5); margin-top:14px; }
+.copy-btn { margin-top:8px; font-family:'Space Mono',monospace; font-size:0.7rem; padding:7px 16px; border:1px solid rgba(0,245,255,0.3); border-radius:50px; background:transparent; color:var(--neon-cyan); cursor:pointer; transition:border-color 0.2s; }
+.copy-btn:hover { border-color:var(--neon-cyan); background:rgba(0,245,255,0.08); }
 
-  /* animated grid bg */
-  .hero-grid {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(191,0,255,0.15) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(191,0,255,0.15) 1px, transparent 1px);
-    background-size: 50px 50px;
-    animation: gridScroll 8s linear infinite;
-    perspective: 500px;
-    transform-style: preserve-3d;
-  }
+/* ADMIN */
+.admin-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.97); backdrop-filter:blur(16px); z-index:600; display:flex; flex-direction:column; opacity:0; pointer-events:none; transition:opacity 0.3s; overflow-y:auto; }
+.admin-overlay.active { opacity:1; pointer-events:all; }
+.admin-panel { max-width:900px; width:100%; margin:0 auto; padding:40px 30px; }
+.admin-login { min-height:100vh; display:flex; align-items:center; justify-content:center; width:100%; }
+.login-box { background:var(--card-bg); border:2px solid var(--neon-yellow); border-radius:28px; padding:50px 40px; max-width:400px; width:100%; text-align:center; box-shadow:0 0 60px rgba(255,230,0,0.2); }
+.login-icon { font-size:3.5rem; margin-bottom:16px; }
+.login-title { font-family:'Russo One',sans-serif; font-size:2rem; color:var(--neon-yellow); margin-bottom:6px; }
+.login-sub { font-size:0.75rem; color:rgba(240,230,255,0.45); margin-bottom:32px; letter-spacing:1px; }
+.login-input { width:100%; padding:14px 20px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,230,0,0.3); border-radius:12px; color:var(--text-main); font-family:'Space Mono',monospace; font-size:1rem; margin-bottom:16px; outline:none; transition:border-color 0.2s; letter-spacing:3px; text-align:center; }
+.login-input:focus { border-color:var(--neon-yellow); box-shadow:0 0 15px rgba(255,230,0,0.2); }
+.login-btn { width:100%; font-family:'Boogaloo',cursive; font-size:1.3rem; padding:14px; border:none; border-radius:50px; cursor:pointer; background:linear-gradient(135deg,var(--neon-yellow),#ff9500); color:#000; font-weight:bold; transition:transform 0.2s,box-shadow 0.2s; }
+.login-btn:hover { transform:scale(1.04); box-shadow:0 0 25px rgba(255,230,0,0.5); }
+.login-error { color:var(--neon-pink); font-size:0.78rem; margin-top:12px; display:none; }
+.admin-dashboard { display:none; }
+.admin-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:40px; padding-bottom:20px; border-bottom:2px solid rgba(255,230,0,0.2); }
+.admin-title { font-family:'Russo One',sans-serif; font-size:2rem; color:var(--neon-yellow); }
+.admin-logout { font-family:'Space Mono',monospace; font-size:0.72rem; padding:10px 20px; border:1px solid rgba(255,0,110,0.4); border-radius:50px; cursor:pointer; background:transparent; color:var(--neon-pink); letter-spacing:1px; transition:border-color 0.2s; }
+.admin-logout:hover { border-color:var(--neon-pink); box-shadow:0 0 10px rgba(255,0,110,0.3); }
+.add-section { background:rgba(255,255,255,0.03); border:1px solid rgba(191,0,255,0.25); border-radius:24px; padding:32px; margin-bottom:40px; }
+.add-title { font-family:'Boogaloo',cursive; font-size:1.6rem; color:var(--neon-purple); margin-bottom:24px; }
+.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.form-group { display:flex; flex-direction:column; gap:8px; }
+.form-group.full { grid-column:1/-1; }
+.form-label { font-size:0.7rem; letter-spacing:1px; text-transform:uppercase; color:rgba(240,230,255,0.55); }
+.form-input,.form-textarea,.form-select { padding:12px 16px; background:rgba(255,255,255,0.05); border:1px solid rgba(191,0,255,0.25); border-radius:12px; color:var(--text-main); font-family:'Space Mono',monospace; font-size:0.85rem; outline:none; transition:border-color 0.2s; }
+.form-input:focus,.form-textarea:focus,.form-select:focus { border-color:var(--neon-purple); box-shadow:0 0 12px rgba(191,0,255,0.2); }
+.form-textarea { resize:vertical; min-height:80px; }
+.form-select option { background:var(--card-bg); }
+.img-upload-area { border:2px dashed rgba(191,0,255,0.35); border-radius:16px; padding:28px; text-align:center; cursor:pointer; transition:border-color 0.2s,background 0.2s; position:relative; }
+.img-upload-area:hover { border-color:var(--neon-purple); background:rgba(191,0,255,0.05); }
+.img-upload-area input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+.img-upload-icon { font-size:2.5rem; margin-bottom:8px; }
+.img-upload-text { font-size:0.8rem; color:rgba(240,230,255,0.5); }
+.img-preview { width:100%; max-height:160px; object-fit:cover; border-radius:10px; display:none; margin-top:12px; }
+.add-btn { width:100%; margin-top:20px; font-family:'Boogaloo',cursive; font-size:1.3rem; padding:14px; border:none; border-radius:50px; cursor:pointer; background:linear-gradient(135deg,var(--neon-purple),var(--neon-pink)); color:#fff; box-shadow:0 0 20px rgba(191,0,255,0.4); transition:transform 0.2s,box-shadow 0.2s; }
+.add-btn:hover { transform:scale(1.03); box-shadow:0 0 35px rgba(191,0,255,0.7); }
+.list-title { font-family:'Boogaloo',cursive; font-size:1.6rem; color:var(--neon-cyan); margin-bottom:20px; }
+.admin-list { display:flex; flex-direction:column; gap:14px; }
+.admin-item { background:rgba(255,255,255,0.03); border:1px solid rgba(0,245,255,0.15); border-radius:16px; padding:18px 22px; display:flex; align-items:center; gap:18px; transition:border-color 0.2s; }
+.admin-item:hover { border-color:rgba(0,245,255,0.35); }
+.admin-thumb { width:70px; height:70px; object-fit:cover; border-radius:10px; flex-shrink:0; }
+.admin-thumb-placeholder { width:70px; height:70px; border-radius:10px; background:linear-gradient(135deg,#2a0050,#5a0090); display:flex; align-items:center; justify-content:center; font-size:1.8rem; flex-shrink:0; }
+.admin-info { flex:1; min-width:0; }
+.admin-item-name { font-family:'Boogaloo',cursive; font-size:1.2rem; }
+.admin-item-meta { font-size:0.72rem; color:rgba(240,230,255,0.5); margin-top:3px; }
+.admin-actions { display:flex; gap:10px; flex-shrink:0; align-items:center; }
+.stock-control { display:flex; align-items:center; gap:8px; }
+.stock-btn { width:32px; height:32px; border:1px solid rgba(255,255,255,0.2); border-radius:8px; background:rgba(255,255,255,0.05); color:var(--text-main); font-size:1.1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:border-color 0.2s,background 0.2s; }
+.stock-btn:hover { border-color:var(--neon-green); background:rgba(57,255,20,0.1); }
+.stock-num { font-family:'Russo One',sans-serif; font-size:1rem; color:var(--neon-green); min-width:28px; text-align:center; }
+.delete-btn { padding:8px 16px; border:1px solid rgba(255,0,110,0.3); border-radius:50px; background:transparent; color:var(--neon-pink); font-family:'Space Mono',monospace; font-size:0.7rem; cursor:pointer; letter-spacing:1px; transition:border-color 0.2s,background 0.2s; }
+.delete-btn:hover { border-color:var(--neon-pink); background:rgba(255,0,110,0.1); }
+.no-products { text-align:center; padding:40px; color:rgba(240,230,255,0.35); font-family:'Boogaloo',cursive; font-size:1.2rem; }
 
-  @keyframes gridScroll {
-    0% { background-position: 0 0; }
-    100% { background-position: 50px 50px; }
-  }
+/* TOAST */
+.toast { position:fixed; bottom:28px; right:28px; background:var(--neon-green); color:#000; font-family:'Boogaloo',cursive; font-size:1.1rem; padding:14px 26px; border-radius:50px; z-index:9999; transform:translateY(100px); opacity:0; transition:transform 0.4s cubic-bezier(.34,1.56,.64,1),opacity 0.4s; box-shadow:0 0 30px rgba(57,255,20,0.5); }
+.toast.show { transform:translateY(0); opacity:1; }
+.toast.err { background:var(--neon-pink); color:#fff; box-shadow:0 0 30px rgba(255,0,110,0.5); }
 
-  /* floating orbs */
-  .orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.25;
-    animation: floatOrb 6s ease-in-out infinite;
-  }
-  .orb-1 { width: 400px; height: 400px; background: var(--neon-purple); top: -100px; left: -100px; }
-  .orb-2 { width: 300px; height: 300px; background: var(--neon-pink); bottom: -80px; right: 5%; animation-delay: -3s; }
-  .orb-3 { width: 250px; height: 250px; background: var(--neon-green); top: 40%; left: 60%; animation-delay: -1.5s; }
-
-  @keyframes floatOrb {
-    0%, 100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-30px) scale(1.05); }
-  }
-
-  .hero-badge {
-    display: inline-block;
-    background: var(--neon-green);
-    color: #000;
-    font-family: 'Boogaloo', cursive;
-    font-size: 0.9rem;
-    padding: 6px 18px;
-    border-radius: 50px;
-    margin-bottom: 24px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    animation: badgePulse 2s ease-in-out infinite;
-    position: relative;
-    z-index: 2;
-  }
-
-  @keyframes badgePulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.06); }
-  }
-
-  .hero-title {
-    font-family: 'Russo One', sans-serif;
-    font-size: clamp(3.5rem, 10vw, 9rem);
-    line-height: 0.95;
-    position: relative;
-    z-index: 2;
-    margin-bottom: 20px;
-  }
-
-  .hero-title .line1 { color: var(--neon-pink); display: block; animation: glitchText 3s infinite; }
-  .hero-title .line2 { color: #fff; display: block; text-shadow: 0 0 40px rgba(255,255,255,0.3); }
-  .hero-title .line3 { color: var(--neon-green); display: block; animation: glitchText 3s 0.5s infinite; }
-
-  @keyframes glitchText {
-    0%, 90%, 100% { transform: none; text-shadow: none; }
-    92% { transform: skewX(-5deg) translateX(-4px); text-shadow: 4px 0 var(--glitch-2), -4px 0 var(--glitch-1); }
-    94% { transform: skewX(3deg) translateX(4px); text-shadow: -4px 0 var(--glitch-2), 4px 0 var(--glitch-1); }
-    96% { transform: none; text-shadow: none; }
-  }
-
-  .hero-sub {
-    font-size: clamp(0.9rem, 2vw, 1.2rem);
-    color: rgba(240,230,255,0.7);
-    max-width: 550px;
-    line-height: 1.7;
-    position: relative;
-    z-index: 2;
-    margin-bottom: 40px;
-  }
-
-  .hero-cta-group {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-    justify-content: center;
-    position: relative;
-    z-index: 2;
-  }
-
-  .btn-primary {
-    font-family: 'Boogaloo', cursive;
-    font-size: 1.4rem;
-    padding: 16px 44px;
-    border: none;
-    border-radius: 60px;
-    cursor: pointer;
-    background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
-    color: #fff;
-    box-shadow: 0 0 30px rgba(255,0,110,0.5), 0 0 60px rgba(191,0,255,0.3);
-    transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s;
-    position: relative;
-    overflow: hidden;
-  }
-  .btn-primary::before {
-    content: '';
-    position: absolute;
-    inset: -2px;
-    background: linear-gradient(135deg, var(--neon-green), var(--neon-cyan), var(--neon-purple), var(--neon-pink));
-    border-radius: 60px;
-    opacity: 0;
-    transition: opacity 0.3s;
-    z-index: -1;
-  }
-  .btn-primary:hover { transform: scale(1.1) rotate(-1deg); box-shadow: 0 0 50px rgba(255,0,110,0.8); }
-
-  .btn-secondary {
-    font-family: 'Boogaloo', cursive;
-    font-size: 1.3rem;
-    padding: 16px 36px;
-    border: 2px solid var(--neon-cyan);
-    border-radius: 60px;
-    cursor: pointer;
-    background: transparent;
-    color: var(--neon-cyan);
-    text-shadow: 0 0 8px var(--neon-cyan);
-    box-shadow: 0 0 15px rgba(0,245,255,0.3), inset 0 0 15px rgba(0,245,255,0.05);
-    transition: transform 0.2s, background 0.2s;
-  }
-  .btn-secondary:hover { transform: scale(1.07) rotate(1deg); background: rgba(0,245,255,0.1); }
-
-  .hero-scroll {
-    position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    color: rgba(240,230,255,0.5);
-    font-size: 0.7rem;
-    letter-spacing: 2px;
-    z-index: 2;
-    animation: scrollBounce 2s ease-in-out infinite;
-  }
-  .scroll-arrow { font-size: 1.4rem; }
-  @keyframes scrollBounce {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(8px); }
-  }
-
-  /* ===== MARQUEE ===== */
-  .marquee-wrap {
-    background: var(--neon-green);
-    padding: 14px 0;
-    overflow: hidden;
-    border-top: 3px solid #000;
-    border-bottom: 3px solid #000;
-  }
-  .marquee-track {
-    display: flex;
-    gap: 0;
-    white-space: nowrap;
-    animation: marquee 12s linear infinite;
-  }
-  .marquee-item {
-    font-family: 'Boogaloo', cursive;
-    font-size: 1.4rem;
-    color: #000;
-    padding: 0 30px;
-    letter-spacing: 1px;
-  }
-  @keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-
-  /* ===== SECTION COMMON ===== */
-  section { padding: 100px 40px; }
-  .section-title {
-    font-family: 'Russo One', sans-serif;
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    text-align: center;
-    margin-bottom: 16px;
-  }
-  .section-sub {
-    text-align: center;
-    color: rgba(240,230,255,0.6);
-    font-size: 0.9rem;
-    margin-bottom: 60px;
-    letter-spacing: 1px;
-  }
-
-  /* ===== PRODUCTS ===== */
-  .products { background: var(--bg-mid); }
-  .products .section-title { color: var(--neon-pink); text-shadow: 0 0 20px rgba(255,0,110,0.4); }
-
-  .product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 28px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .product-card {
-    background: var(--card-bg);
-    border: 1px solid rgba(191,0,255,0.3);
-    border-radius: 20px;
-    overflow: hidden;
-    position: relative;
-    cursor: pointer;
-    transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), border-color 0.3s, box-shadow 0.3s;
-  }
-  .product-card:hover {
-    transform: translateY(-12px) rotate(-1deg) scale(1.02);
-    border-color: var(--neon-purple);
-    box-shadow: 0 20px 60px rgba(191,0,255,0.4), 0 0 0 1px var(--neon-purple);
-  }
-  .product-card:nth-child(even):hover { transform: translateY(-12px) rotate(1deg) scale(1.02); }
-
-  .card-thumb {
-    width: 100%;
-    height: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 5rem;
-    position: relative;
-    overflow: hidden;
-  }
-  .card-thumb::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, transparent 50%, var(--card-bg));
-  }
-
-  .thumb-1 { background: linear-gradient(135deg, #1a0030, #3d0070); }
-  .thumb-2 { background: linear-gradient(135deg, #001a10, #003d25); }
-  .thumb-3 { background: linear-gradient(135deg, #200010, #500028); }
-  .thumb-4 { background: linear-gradient(135deg, #001a2a, #003d5a); }
-  .thumb-5 { background: linear-gradient(135deg, #1a1200, #4a3300); }
-  .thumb-6 { background: linear-gradient(135deg, #1a0020, #3d0050); }
-
-  .card-badge {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    background: var(--neon-pink);
-    color: #fff;
-    font-family: 'Boogaloo', cursive;
-    font-size: 0.85rem;
-    padding: 4px 12px;
-    border-radius: 50px;
-    z-index: 2;
-    animation: badgePulse 1.5s ease-in-out infinite;
-  }
-
-  .card-body { padding: 20px; }
-  .card-tag {
-    font-size: 0.65rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--neon-purple);
-    margin-bottom: 8px;
-  }
-  .card-name {
-    font-family: 'Boogaloo', cursive;
-    font-size: 1.5rem;
-    margin-bottom: 6px;
-  }
-  .card-desc { font-size: 0.78rem; color: rgba(240,230,255,0.6); line-height: 1.6; margin-bottom: 18px; }
-  .card-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-
-  .card-price {
-    font-family: 'Russo One', sans-serif;
-    font-size: 1.4rem;
-    color: var(--neon-green);
-    text-shadow: 0 0 10px rgba(57,255,20,0.4);
-  }
-
-  .buy-btn {
-    font-family: 'Boogaloo', cursive;
-    font-size: 1.05rem;
-    padding: 10px 22px;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink));
-    color: #fff;
-    box-shadow: 0 0 15px rgba(191,0,255,0.4);
-    transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s;
-    position: relative;
-  }
-  .buy-btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 30px rgba(191,0,255,0.7);
-  }
-  .buy-btn:active { transform: scale(0.95); }
-
-  /* click ripple */
-  .buy-btn::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 50px;
-    background: rgba(255,255,255,0.2);
-    opacity: 0;
-    transition: opacity 0.1s;
-  }
-  .buy-btn:active::after { opacity: 1; }
-
-  /* ===== TRUST SECTION ===== */
-  .trust { background: var(--bg-dark); }
-  .trust .section-title { color: var(--neon-cyan); text-shadow: 0 0 20px rgba(0,245,255,0.4); }
-
-  .trust-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 24px;
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-
-  .trust-card {
-    background: var(--card-bg);
-    border: 1px solid rgba(0,245,255,0.2);
-    border-radius: 20px;
-    padding: 36px 28px;
-    text-align: center;
-    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
-    position: relative;
-    overflow: hidden;
-  }
-  .trust-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  .trust-card:hover { transform: translateY(-8px); border-color: var(--neon-cyan); box-shadow: 0 10px 40px rgba(0,245,255,0.15); }
-  .trust-card:hover::before { opacity: 1; }
-
-  .trust-icon { font-size: 3rem; margin-bottom: 16px; display: block; }
-  .trust-label {
-    font-family: 'Boogaloo', cursive;
-    font-size: 1.3rem;
-    color: var(--neon-cyan);
-    margin-bottom: 10px;
-  }
-  .trust-text { font-size: 0.8rem; color: rgba(240,230,255,0.6); line-height: 1.7; }
-
-  /* ===== PAYMENT ===== */
-  .payment { background: var(--bg-mid); }
-  .payment .section-title { color: var(--neon-yellow); text-shadow: 0 0 20px rgba(255,230,0,0.4); }
-
-  .payment-inner {
-    max-width: 800px;
-    margin: 0 auto;
-    background: var(--card-bg);
-    border: 2px solid rgba(255,230,0,0.3);
-    border-radius: 28px;
-    padding: 50px 40px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .payment-inner::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at center, rgba(255,230,0,0.04) 0%, transparent 70%);
-  }
-
-  .payment-methods {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 16px;
-    margin: 32px 0;
-  }
-  .pay-pill {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 50px;
-    padding: 12px 24px;
-    font-family: 'Boogaloo', cursive;
-    font-size: 1.1rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: transform 0.2s, border-color 0.2s;
-  }
-  .pay-pill:hover { transform: scale(1.06); border-color: var(--neon-yellow); }
-
-  .payment-note {
-    font-size: 0.8rem;
-    color: rgba(240,230,255,0.5);
-    max-width: 500px;
-    margin: 0 auto;
-    line-height: 1.7;
-  }
-
-  /* ===== FOOTER ===== */
-  footer {
-    background: #000;
-    border-top: 2px solid var(--neon-purple);
-    padding: 40px;
-    text-align: center;
-  }
-  .footer-logo {
-    font-family: 'Russo One', sans-serif;
-    font-size: 2rem;
-    color: var(--neon-purple);
-    text-shadow: 0 0 15px var(--neon-purple);
-    margin-bottom: 16px;
-  }
-  .footer-links { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin-bottom: 24px; }
-  .footer-links a { color: rgba(240,230,255,0.5); text-decoration: none; font-size: 0.75rem; letter-spacing: 1px; transition: color 0.2s; }
-  .footer-links a:hover { color: var(--neon-pink); }
-  .footer-copy { font-size: 0.7rem; color: rgba(240,230,255,0.3); }
-
-  /* ===== ANIMATIONS ===== */
-  @keyframes flicker {
-    0%, 95%, 100% { opacity: 1; }
-    96% { opacity: 0.3; }
-    97% { opacity: 1; }
-    98% { opacity: 0.5; }
-    99% { opacity: 1; }
-  }
-
-  /* ===== MODAL CHECKOUT ===== */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    backdrop-filter: blur(10px);
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s;
-  }
-  .modal-overlay.active { opacity: 1; pointer-events: all; }
-
-  .modal {
-    background: var(--card-bg);
-    border: 2px solid var(--neon-purple);
-    border-radius: 28px;
-    padding: 40px;
-    max-width: 480px;
-    width: 100%;
-    box-shadow: 0 0 80px rgba(191,0,255,0.4);
-    transform: scale(0.9) translateY(20px);
-    transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
-    position: relative;
-  }
-  .modal-overlay.active .modal { transform: scale(1) translateY(0); }
-
-  .modal-close {
-    position: absolute;
-    top: 16px; right: 20px;
-    background: none;
-    border: none;
-    color: rgba(240,230,255,0.5);
-    font-size: 1.5rem;
-    cursor: pointer;
-    transition: color 0.2s;
-  }
-  .modal-close:hover { color: var(--neon-pink); }
-
-  .modal-title {
-    font-family: 'Russo One', sans-serif;
-    font-size: 1.8rem;
-    color: var(--neon-green);
-    margin-bottom: 6px;
-  }
-  .modal-product { font-size: 0.85rem; color: rgba(240,230,255,0.6); margin-bottom: 30px; }
-
-  .checkout-methods {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 24px;
-  }
-  .checkout-option {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 14px;
-    padding: 16px 20px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    transition: border-color 0.2s, background 0.2s, transform 0.2s;
-    color: var(--text-main);
-    font-family: 'Space Mono', monospace;
-    font-size: 0.85rem;
-  }
-  .checkout-option:hover { border-color: var(--neon-purple); background: rgba(191,0,255,0.08); transform: translateX(4px); }
-  .checkout-option .method-icon { font-size: 1.8rem; }
-  .checkout-option .method-info { text-align: left; }
-  .checkout-option .method-name { font-family: 'Boogaloo', cursive; font-size: 1.1rem; }
-  .checkout-option .method-desc { font-size: 0.7rem; color: rgba(240,230,255,0.5); }
-
-  .modal-total {
-    border-top: 1px solid rgba(191,0,255,0.3);
-    padding-top: 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  .modal-total-label { font-size: 0.8rem; color: rgba(240,230,255,0.6); }
-  .modal-total-price { font-family: 'Russo One', sans-serif; font-size: 1.6rem; color: var(--neon-green); }
-
-  .confirm-btn {
-    width: 100%;
-    font-family: 'Boogaloo', cursive;
-    font-size: 1.3rem;
-    padding: 16px;
-    border: none;
-    border-radius: 60px;
-    cursor: pointer;
-    background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
-    color: #fff;
-    box-shadow: 0 0 30px rgba(191,0,255,0.5);
-    transition: transform 0.2s cubic-bezier(.34,1.56,.64,1);
-  }
-  .confirm-btn:hover { transform: scale(1.04); }
-
-  /* ===== TOAST ===== */
-  .toast {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background: var(--neon-green);
-    color: #000;
-    font-family: 'Boogaloo', cursive;
-    font-size: 1.1rem;
-    padding: 16px 28px;
-    border-radius: 50px;
-    z-index: 99999;
-    transform: translateY(100px);
-    opacity: 0;
-    transition: transform 0.4s cubic-bezier(.34,1.56,.64,1), opacity 0.4s;
-    box-shadow: 0 0 30px rgba(57,255,20,0.5);
-  }
-  .toast.show { transform: translateY(0); opacity: 1; }
-
-  /* ===== RESPONSIVE ===== */
-  @media (max-width: 768px) {
-    nav { padding: 12px 20px; }
-    .nav-links { display: none; }
-    section { padding: 70px 20px; }
-    .payment-inner { padding: 30px 20px; }
-  }
+@media(max-width:768px) {
+  nav { padding:12px 20px; }
+  .nav-links { display:none; }
+  section { padding:70px 20px; }
+  .form-grid { grid-template-columns:1fr; }
+  .admin-item { flex-wrap:wrap; }
+  .payinfo-inner { padding:30px 20px; }
+}
 </style>
 </head>
 <body>
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo">🧠 BRAINROT</div>
+  <div class="nav-logo">🧠 BRAINROT EMPORIUM</div>
   <ul class="nav-links">
     <li><a href="#products">SHOP</a></li>
     <li><a href="#trust">TRUST</a></li>
-    <li><a href="#payment">PAGAMENTI</a></li>
+    <li><a href="#payment">PAYMENTS</a></li>
   </ul>
-  <button class="cart-btn" onclick="showToast('🛒 Cart è vuoto... per ora!')">🛒 CARRELLO (0)</button>
+  <button class="admin-nav-btn" onclick="openAdmin()">⚙️ ADMIN</button>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-grid"></div>
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
-
-  <div class="hero-badge">🔥 DROP LIMITATO — SKIBIDI EDITION</div>
-
+  <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
+  <div class="hero-badge">🔥 LIMITED DROP — SKIBIDI EDITION</div>
   <h1 class="hero-title">
     <span class="line1">BRAINROT</span>
     <span class="line2">EMPORIUM</span>
     <span class="line3">™</span>
   </h1>
-
-  <p class="hero-sub">
-    Asset per montaggi, meme pack e merch fisico per chi ha il cervello già fritto.
-    Prodotti di bassa lega ad altissima energia. ⚡
-  </p>
-
-  <div class="hero-cta-group">
-    <button class="btn-primary" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
-      💀 SHOP ORA
-    </button>
-    <button class="btn-secondary" onclick="document.getElementById('trust').scrollIntoView({behavior:'smooth'})">
-      🔒 È SICURO?
-    </button>
-  </div>
-
-  <div class="hero-scroll">
-    <span class="scroll-arrow">↓</span>
-    <span>SCROLL</span>
-  </div>
+  <p class="hero-sub">Clips, meme packs, sound kits & physical merch for people whose brain is already cooked. ⚡ High energy. Low quality. Maximum sigma.</p>
+  <button class="hero-cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">💀 SHOP NOW</button>
+  <div class="hero-scroll"><span>↓</span><span>SCROLL</span></div>
 </section>
 
 <!-- MARQUEE -->
 <div class="marquee-wrap">
   <div class="marquee-track">
-    <span class="marquee-item">🧠 BRAINROT CERTIFIED</span>
-    <span class="marquee-item">💀 SIGMA PACK</span>
-    <span class="marquee-item">⚡ RIZZ OVERLOAD</span>
-    <span class="marquee-item">🎮 SKIBIDI ASSETS</span>
-    <span class="marquee-item">🔥 W RIZZ</span>
-    <span class="marquee-item">😤 NO CAP FR FR</span>
-    <span class="marquee-item">🧠 BRAINROT CERTIFIED</span>
-    <span class="marquee-item">💀 SIGMA PACK</span>
-    <span class="marquee-item">⚡ RIZZ OVERLOAD</span>
-    <span class="marquee-item">🎮 SKIBIDI ASSETS</span>
-    <span class="marquee-item">🔥 W RIZZ</span>
-    <span class="marquee-item">😤 NO CAP FR FR</span>
+    <span class="marquee-item">🧠 BRAINROT CERTIFIED</span><span class="marquee-item">💀 SIGMA PACK</span>
+    <span class="marquee-item">⚡ RIZZ OVERLOAD</span><span class="marquee-item">🎮 SKIBIDI ASSETS</span>
+    <span class="marquee-item">🔥 W RIZZ</span><span class="marquee-item">😤 NO CAP FR FR</span>
+    <span class="marquee-item">🧠 BRAINROT CERTIFIED</span><span class="marquee-item">💀 SIGMA PACK</span>
+    <span class="marquee-item">⚡ RIZZ OVERLOAD</span><span class="marquee-item">🎮 SKIBIDI ASSETS</span>
+    <span class="marquee-item">🔥 W RIZZ</span><span class="marquee-item">😤 NO CAP FR FR</span>
   </div>
 </div>
 
 <!-- PRODUCTS -->
 <section class="products" id="products">
-  <h2 class="section-title">🛒 I PRODOTTI</h2>
-  <p class="section-sub">// ogni acquisto peggiora leggermente il tuo cervello. stai comprando consapevolmente.</p>
-
+  <h2 class="section-title">🛒 THE SHOP</h2>
+  <p class="section-sub">// every purchase slightly worsens your brain. you're buying knowingly.</p>
   <div class="product-grid" id="product-grid"></div>
 </section>
 
 <!-- TRUST -->
 <section class="trust" id="trust">
-  <h2 class="section-title">🔒 PERCHÉ FIDARTI DI NOI</h2>
-  <p class="section-sub">// sì lo so, sembra uno scam. non lo è. quasi.</p>
-
+  <h2 class="section-title">🔒 WHY TRUST US</h2>
+  <p class="section-sub">// yes it looks like a scam. it's not. probably.</p>
   <div class="trust-grid">
-    <div class="trust-card">
-      <span class="trust-icon">🔐</span>
-      <div class="trust-label">STRIPE SSL</div>
-      <p class="trust-text">I tuoi dati di pagamento vanno direttamente a Stripe, un colosso fintech da $65B. Noi non vediamo neanche il numero della tua carta. Giuro sul mio Wi-Fi.</p>
-    </div>
-    <div class="trust-card">
-      <span class="trust-icon">⚡</span>
-      <div class="trust-label">DOWNLOAD ISTANTANEO</div>
-      <p class="trust-text">Prodotti digitali consegnati in meno di 30 secondi dopo il pagamento. Più veloce della tua attention span su TikTok.</p>
-    </div>
-    <div class="trust-card">
-      <span class="trust-icon">🔁</span>
-      <div class="trust-label">RIMBORSO 7 GIORNI</div>
-      <p class="trust-text">Se gli asset fanno schifo (impossibile, ma ok), hai 7 giorni per chiedere i soldi indietro. Nessuna domanda. Beh, forse una.</p>
-    </div>
-    <div class="trust-card">
-      <span class="trust-icon">🕵️</span>
-      <div class="trust-label">ZERO SPAM</div>
-      <p class="trust-text">La tua email non viene venduta a nessuno. Non abbiamo neanche un CRM. Siamo troppo brainrotted per farlo funzionare.</p>
-    </div>
+    <div class="trust-card"><span class="trust-icon">🔐</span><div class="trust-label">SECURE PAYMENTS</div><p class="trust-text">PayPal & Skrill are globally trusted platforms. Your money goes directly to our verified accounts. No sketchy middlemen.</p></div>
+    <div class="trust-card"><span class="trust-icon">⚡</span><div class="trust-label">INSTANT DELIVERY</div><p class="trust-text">Digital products delivered in under 30 seconds after payment confirmation. Faster than your TikTok attention span.</p></div>
+    <div class="trust-card"><span class="trust-icon">🔁</span><div class="trust-label">7-DAY REFUND</div><p class="trust-text">If the assets are trash (impossible, but ok), you have 7 days to ask for a refund. No questions asked. Well, maybe one.</p></div>
+    <div class="trust-card"><span class="trust-icon">🕵️</span><div class="trust-label">ZERO SPAM</div><p class="trust-text">Your email is never sold to anyone. We don't even have a CRM. We're too brainrotted to make it work.</p></div>
   </div>
 </section>
 
-<!-- PAYMENT -->
-<section class="payment" id="payment">
-  <h2 class="section-title">💳 COME PAGHI</h2>
-  <p class="section-sub">// accettiamo praticamente tutto tranne buoni pasto e speranza</p>
-
-  <div class="payment-inner">
-    <p style="font-family:'Boogaloo',cursive;font-size:1.2rem;margin-bottom:8px;color:rgba(240,230,255,0.8);">
-      Tutti i metodi passano per gateway certificati PCI-DSS Level 1. 
-      In italiano: roba seria, nessuno ti ruba i soldi.
-    </p>
-
-    <div class="payment-methods">
-      <div class="pay-pill">💳 Stripe</div>
+<!-- PAYMENT INFO -->
+<section class="payinfo" id="payment">
+  <h2 class="section-title">💳 HOW TO PAY</h2>
+  <p class="section-sub">// we accept everything except meal vouchers and hope</p>
+  <div class="payinfo-inner">
+    <p style="font-family:'Boogaloo',cursive;font-size:1.15rem;color:rgba(240,230,255,0.8);">Click "Buy" on any product, choose your method, and send the exact amount. Simple as a meme. Safe as a bunker.</p>
+    <div class="pay-methods">
       <div class="pay-pill">🅿️ PayPal</div>
-      <div class="pay-pill">🏦 Bonifico IBAN</div>
+      <div class="pay-pill">🏦 Bank Transfer (IBAN)</div>
       <div class="pay-pill">🟡 Skrill</div>
-      <div class="pay-pill">🍎 Apple Pay</div>
-      <div class="pay-pill">🔵 Google Pay</div>
     </div>
-
-    <p class="payment-note">
-      Per i prodotti digitali utilizziamo <strong style="color:var(--neon-yellow)">Stripe Checkout</strong> — si apre una pagina sicura di Stripe, paghi, ricevi il download link via email. 
-      Semplice come un meme. Sicuro come un bunker nucleare. 🏦
-    </p>
+    <p class="payinfo-note">After paying, email your receipt to <strong style="color:var(--neon-cyan)">francescobello0101012@gmail.com</strong> with the product name. Your download link arrives within 24h. 📩</p>
   </div>
 </section>
 
@@ -833,59 +326,113 @@
 <footer>
   <div class="footer-logo">🧠 BRAINROT EMPORIUM™</div>
   <div class="footer-links">
-    <a href="#">Privacy Policy</a>
-    <a href="#">Termini di Servizio</a>
-    <a href="#">Rimborsi</a>
-    <a href="#">Contatti</a>
-    <a href="#">Affiliati</a>
+    <a href="#">Privacy Policy</a><a href="#">Terms of Service</a>
+    <a href="#">Refunds</a><a href="#">Contact</a>
   </div>
-  <p class="footer-copy">© 2025 Brainrot Emporium. Tutti i diritti riservati. Il tuo cervello no.</p>
+  <p class="footer-copy">© 2025 Brainrot Emporium. All rights reserved. Your brain however is not.</p>
 </footer>
 
-<!-- MODAL CHECKOUT -->
-<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+<!-- BUY MODAL: choose method -->
+<div class="modal-overlay" id="buy-modal">
   <div class="modal">
-    <button class="modal-close" onclick="closeModalBtn()">✕</button>
-    <div class="modal-title">💳 CHECKOUT</div>
-    <div class="modal-product" id="modal-product-name">Caricamento...</div>
-
-    <div class="checkout-methods">
-      <div class="checkout-option" onclick="selectPayment('stripe')">
-        <span class="method-icon">💳</span>
-        <div class="method-info">
-          <div class="method-name">Stripe (Carta di Credito)</div>
-          <div class="method-desc">Visa, Mastercard, AMEX — sicuro e veloce</div>
-        </div>
-      </div>
-      <div class="checkout-option" onclick="selectPayment('paypal')">
-        <span class="method-icon">🅿️</span>
-        <div class="method-info">
-          <div class="method-name">PayPal</div>
-          <div class="method-desc">Paga con il tuo account PayPal</div>
-        </div>
-      </div>
-      <div class="checkout-option" onclick="selectPayment('skrill')">
-        <span class="method-icon">🟡</span>
-        <div class="method-info">
-          <div class="method-name">Skrill</div>
-          <div class="method-desc">Wallet digitale internazionale</div>
-        </div>
-      </div>
-      <div class="checkout-option" onclick="selectPayment('iban')">
-        <span class="method-icon">🏦</span>
-        <div class="method-info">
-          <div class="method-name">Bonifico IBAN</div>
-          <div class="method-desc">IT60 X054 2811 1010 0000 0123 456 — 2-3 giorni lavorativi</div>
-        </div>
+    <button class="modal-close" onclick="closeBuyModal()">✕</button>
+    <div class="modal-title">💸 CHOOSE PAYMENT</div>
+    <div class="modal-subtitle">Select how you want to pay. Details appear right here.</div>
+    <div class="modal-product-preview">
+      <div id="modal-thumb"></div>
+      <div>
+        <div class="modal-product-name" id="modal-name">—</div>
+        <div class="modal-product-price" id="modal-price">—</div>
       </div>
     </div>
-
-    <div class="modal-total">
-      <span class="modal-total-label">TOTALE</span>
-      <span class="modal-total-price" id="modal-price">€0.00</span>
+    <div class="payment-options">
+      <div class="pay-option" onclick="showPaymentDetail('paypal')">
+        <span class="pay-option-icon">🅿️</span>
+        <div><div class="pay-option-name">PayPal</div><div class="pay-option-detail">francescobello0101012@gmail.com</div></div>
+        <span class="pay-option-arrow">→</span>
+      </div>
+      <div class="pay-option" onclick="showPaymentDetail('skrill')">
+        <span class="pay-option-icon">🟡</span>
+        <div><div class="pay-option-name">Skrill</div><div class="pay-option-detail">vilellafrancesco156@gmail.com</div></div>
+        <span class="pay-option-arrow">→</span>
+      </div>
+      <div class="pay-option" onclick="showPaymentDetail('iban')">
+        <span class="pay-option-icon">🏦</span>
+        <div><div class="pay-option-name">Bank Transfer (IBAN)</div><div class="pay-option-detail">IT14J0338501601100000808795</div></div>
+        <span class="pay-option-arrow">→</span>
+      </div>
     </div>
+    <div class="modal-note">After paying, email your receipt to <strong style="color:var(--neon-cyan)">francescobello0101012@gmail.com</strong> with the product name. ✅</div>
+  </div>
+</div>
 
-    <button class="confirm-btn" onclick="confirmPayment()">🚀 CONFERMA ACQUISTO</button>
+<!-- PAYMENT DETAIL MODAL -->
+<div class="modal-overlay" id="pd-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closePdModal()">✕</button>
+    <div class="modal-title" id="pd-title">—</div>
+    <div class="modal-subtitle">Send the exact amount shown below, then email your receipt.</div>
+    <div id="pd-body"></div>
+    <div class="modal-note" id="pd-note"></div>
+  </div>
+</div>
+
+<!-- ADMIN OVERLAY -->
+<div class="admin-overlay" id="admin-overlay">
+  <!-- LOGIN -->
+  <div class="admin-login" id="admin-login">
+    <div class="login-box">
+      <div class="login-icon">🔐</div>
+      <div class="login-title">ADMIN ACCESS</div>
+      <div class="login-sub">// authorized personnel only. that's you. hopefully.</div>
+      <input class="login-input" type="password" id="admin-pw" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPw()">
+      <button class="login-btn" onclick="checkPw()">🚀 ENTER</button>
+      <div class="login-error" id="login-err">❌ Wrong password. Try again.</div>
+      <button onclick="closeAdmin()" style="margin-top:16px;background:none;border:none;color:rgba(240,230,255,0.4);font-size:0.75rem;cursor:pointer;letter-spacing:1px;">← BACK TO SITE</button>
+    </div>
+  </div>
+  <!-- DASHBOARD -->
+  <div class="admin-dashboard" id="admin-dash">
+    <div class="admin-panel">
+      <div class="admin-header">
+        <div class="admin-title">⚙️ ADMIN PANEL</div>
+        <button class="admin-logout" onclick="adminLogout()">🚪 LOGOUT</button>
+      </div>
+      <!-- ADD FORM -->
+      <div class="add-section">
+        <div class="add-title">➕ Add New Product</div>
+        <div class="form-grid">
+          <div class="form-group"><label class="form-label">Product Name *</label><input class="form-input" type="text" id="f-name" placeholder="e.g. Garama Figure"></div>
+          <div class="form-group"><label class="form-label">Price (€) *</label><input class="form-input" type="number" id="f-price" placeholder="9.99" step="0.01" min="0"></div>
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select class="form-select" id="f-tag">
+              <option value="BRAINROT CHARACTER">BRAINROT CHARACTER</option>
+              <option value="DIGITAL PACK">DIGITAL PACK</option>
+              <option value="MEME PACK">MEME PACK</option>
+              <option value="SOUND KIT">SOUND KIT</option>
+              <option value="PHYSICAL MERCH">PHYSICAL MERCH</option>
+              <option value="PRESET PACK">PRESET PACK</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Stock Quantity *</label><input class="form-input" type="number" id="f-stock" placeholder="5" min="0"></div>
+          <div class="form-group full"><label class="form-label">Description</label><textarea class="form-textarea" id="f-desc" placeholder="Describe the product..."></textarea></div>
+          <div class="form-group full">
+            <label class="form-label">Product Photo</label>
+            <div class="img-upload-area">
+              <input type="file" accept="image/*" id="f-img" onchange="previewImg(event)">
+              <div class="img-upload-icon">📸</div>
+              <div class="img-upload-text">Click or drag image here<br><span style="color:rgba(240,230,255,0.3);font-size:0.7rem">PNG, JPG, WEBP — max 5MB</span></div>
+              <img class="img-preview" id="img-prev" alt="preview">
+            </div>
+          </div>
+        </div>
+        <button class="add-btn" onclick="addProduct()">💾 ADD TO STORE</button>
+      </div>
+      <!-- LIST -->
+      <div class="list-title">📦 Your Products (<span id="prod-count">0</span>)</div>
+      <div class="admin-list" id="admin-list"></div>
+    </div>
   </div>
 </div>
 
@@ -893,137 +440,227 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const products = [
-  {
-    id: 1,
-    emoji: '💀',
-    thumb: 'thumb-1',
-    tag: 'DIGITAL PACK',
-    name: 'Sigma Rizz Pack',
-    desc: '500+ clip brainrot ready-to-use. Skibidi, Ohio edits, transition glitch. Formato MP4 4K. Il tuo montaggio non sarà mai più lo stesso (in peggio).',
-    price: 12.99,
-    badge: '🔥 BESTSELLER'
-  },
-  {
-    id: 2,
-    emoji: '🎮',
-    thumb: 'thumb-2',
-    tag: 'MEME PACK',
-    name: 'No Cap Meme Bundle',
-    desc: '1000+ template PNG/PSD ad altissima energia. Formati IG, TikTok, YouTube Shorts. No watermark, no license drama.',
-    price: 7.99,
-    badge: null
-  },
-  {
-    id: 3,
-    emoji: '⚡',
-    thumb: 'thumb-3',
-    tag: 'SOUND EFFECTS',
-    name: 'Brainrot SFX Kit',
-    desc: '200+ effetti sonori: Ohio audio, bass drops, tuba meme, fart reverb. WAV 48kHz. Compatibile Premiere, DaVinci, CapCut.',
-    price: 9.99,
-    badge: '⚡ NEW'
-  },
-  {
-    id: 4,
-    emoji: '🧢',
-    thumb: 'thumb-4',
-    tag: 'MERCH FISICO',
-    name: 'Cappellino Sigma',
-    desc: 'Cappellino ricamato "Sigma Grindset". Taglia unica. Spedizione EU 5-7 giorni. Ti rende automaticamente il più ganzo del gruppo.',
-    price: 24.99,
-    badge: null
-  },
-  {
-    id: 5,
-    emoji: '🎨',
-    thumb: 'thumb-5',
-    tag: 'PRESET PACK',
-    name: 'Chaos LUT Bundle',
-    desc: 'LUT cinematic con vibe brainrot. Saturazione estrema, grana film, tone mapping chaotic. 30 preset LUT .cube per qualsiasi editor.',
-    price: 5.99,
-    badge: '💸 OFFERTA'
-  },
-  {
-    id: 6,
-    emoji: '👕',
-    thumb: 'thumb-6',
-    tag: 'MERCH FISICO',
-    name: 'T-Shirt Ohio Mode',
-    desc: '"Ohio Mode: ON" stampato su cotone 100% biologico. Perché anche il brainrot può essere sostenibile. S/M/L/XL/XXL.',
-    price: 29.99,
-    badge: null
-  }
-];
-
+const ADMIN_PW = 'brainrot2025'; // ← CHANGE THIS PASSWORD!
+let products = JSON.parse(localStorage.getItem('be_v2') || '[]');
 let currentProduct = null;
+let imgData = null;
+let loggedIn = false;
 
-function renderProducts() {
-  const grid = document.getElementById('product-grid');
-  grid.innerHTML = products.map(p => `
-    <div class="product-card">
-      ${p.badge ? `<div class="card-badge">${p.badge}</div>` : ''}
-      <div class="card-thumb ${p.thumb}">
-        <span>${p.emoji}</span>
-      </div>
+function save() { localStorage.setItem('be_v2', JSON.stringify(products)); }
+
+/* ---- STORE ---- */
+function renderStore() {
+  const g = document.getElementById('product-grid');
+  if (!products.length) {
+    g.innerHTML = `<div class="empty-store"><div class="empty-icon">🧠</div><p>No products yet — check back soon!</p></div>`;
+    return;
+  }
+  g.innerHTML = products.map(p => {
+    const out = p.stock <= 0;
+    return `<div class="product-card${out?' sold-out':''}">
+      ${out?'<div class="sold-out-overlay"><div class="sold-out-label">SOLD OUT</div></div>':''}
+      ${p.img?`<img class="card-img" src="${p.img}" alt="${p.name}">`:`<div class="card-img-placeholder">🧠</div>`}
       <div class="card-body">
         <div class="card-tag">${p.tag}</div>
         <div class="card-name">${p.name}</div>
-        <p class="card-desc">${p.desc}</p>
+        <p class="card-desc">${p.desc||'Brainrot-certified. Handle with care.'}</p>
         <div class="card-footer">
-          <span class="card-price">€${p.price.toFixed(2)}</span>
-          <button class="buy-btn" onclick="openModal(${p.id})">🛒 COMPRA</button>
+          <div class="card-left">
+            <span class="card-price">€${(+p.price).toFixed(2)}</span>
+            <span class="card-stock">${out?'❌ Out of stock':`✅ ${p.stock} left`}</span>
+          </div>
+          <button class="buy-btn" ${out?'disabled':`onclick="openBuy(${p.id})"`}>${out?'SOLD OUT':'💳 BUY'}</button>
         </div>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
-function openModal(productId) {
-  currentProduct = products.find(p => p.id === productId);
-  document.getElementById('modal-product-name').textContent = `📦 ${currentProduct.name}`;
-  document.getElementById('modal-price').textContent = `€${currentProduct.price.toFixed(2)}`;
-  document.getElementById('modal-overlay').classList.add('active');
-}
-
-function closeModalBtn() {
-  document.getElementById('modal-overlay').classList.remove('active');
-}
-
-function closeModal(e) {
-  if (e.target === document.getElementById('modal-overlay')) closeModalBtn();
-}
-
-function selectPayment(method) {
-  const labels = {
-    stripe: 'Stripe Checkout',
-    paypal: 'PayPal',
-    skrill: 'Skrill',
-    iban: 'Bonifico IBAN'
-  };
-  showToast(`✅ Metodo selezionato: ${labels[method]}`);
-}
-
-function confirmPayment() {
+/* ---- BUY MODAL ---- */
+function openBuy(id) {
+  currentProduct = products.find(p => p.id === id);
   if (!currentProduct) return;
-  closeModalBtn();
-  // In produzione: window.location.href = stripeCheckoutUrl
-  showToast(`🚀 Redirecting a Stripe Checkout per "${currentProduct.name}"...`);
-  setTimeout(() => {
-    showToast('✅ Pagamento completato! Controlla la tua email. 🧠');
-  }, 2500);
+  document.getElementById('modal-name').textContent = currentProduct.name;
+  document.getElementById('modal-price').textContent = `€${(+currentProduct.price).toFixed(2)}`;
+  document.getElementById('modal-thumb').innerHTML = currentProduct.img
+    ? `<img class="modal-product-img" src="${currentProduct.img}" alt="${currentProduct.name}">`
+    : `<div class="modal-product-placeholder">🧠</div>`;
+  document.getElementById('buy-modal').classList.add('active');
+}
+function closeBuyModal() { document.getElementById('buy-modal').classList.remove('active'); }
+
+function showPaymentDetail(method) {
+  if (!currentProduct) return;
+  const p = currentProduct;
+  const price = `€${(+p.price).toFixed(2)}`;
+  let title, body, note;
+
+  if (method === 'paypal') {
+    title = '🅿️ PayPal Payment';
+    body = `<div class="pd-box" style="background:rgba(0,112,240,0.08);border:1px solid rgba(0,112,240,0.3)">
+      <div class="pd-label">Send payment to</div>
+      <div class="pd-value">francescobello0101012@gmail.com</div>
+      <button class="copy-btn" onclick="copyText('francescobello0101012@gmail.com')">📋 Copy email</button>
+      <div class="pd-label" style="margin-top:16px">Amount</div>
+      <div class="pd-amount">${price}</div>
+      <div class="pd-ref">Reference: <strong>${p.name}</strong></div>
+    </div>`;
+    note = '1. Open PayPal → Send Money  2. Paste the email above  3. Send exactly ' + price + '  4. Email your receipt to francescobello0101012@gmail.com ✅';
+  } else if (method === 'skrill') {
+    title = '🟡 Skrill Payment';
+    body = `<div class="pd-box" style="background:rgba(128,0,128,0.08);border:1px solid rgba(128,0,128,0.3)">
+      <div class="pd-label">Send payment to</div>
+      <div class="pd-value">vilellafrancesco156@gmail.com</div>
+      <button class="copy-btn" onclick="copyText('vilellafrancesco156@gmail.com')">📋 Copy email</button>
+      <div class="pd-label" style="margin-top:16px">Amount</div>
+      <div class="pd-amount">${price}</div>
+      <div class="pd-ref">Reference: <strong>${p.name}</strong></div>
+    </div>`;
+    note = '1. Open Skrill → Send Money  2. Paste the email above  3. Send exactly ' + price + '  4. Email your receipt to francescobello0101012@gmail.com ✅';
+  } else {
+    title = '🏦 Bank Transfer';
+    body = `<div class="pd-box" style="background:rgba(0,80,0,0.08);border:1px solid rgba(57,255,20,0.25)">
+      <div class="pd-label">IBAN</div>
+      <div class="pd-value">IT14J0338501601100000808795</div>
+      <button class="copy-btn" onclick="copyText('IT14J0338501601100000808795')">📋 Copy IBAN</button>
+      <div class="pd-label" style="margin-top:16px">Amount</div>
+      <div class="pd-amount">${price}</div>
+      <div class="pd-label" style="margin-top:16px">Reason / Causale</div>
+      <div class="pd-value" style="font-size:0.9rem">${p.name} - Brainrot Emporium</div>
+    </div>`;
+    note = '⏱ Bank transfers take 2-3 business days. After sending, email francescobello0101012@gmail.com with your confirmation and product name. We ship within 24h of confirmation.';
+  }
+
+  document.getElementById('pd-title').textContent = title;
+  document.getElementById('pd-body').innerHTML = body;
+  document.getElementById('pd-note').textContent = note;
+  closeBuyModal();
+  document.getElementById('pd-modal').classList.add('active');
+}
+function closePdModal() { document.getElementById('pd-modal').classList.remove('active'); }
+
+function copyText(text) {
+  navigator.clipboard.writeText(text).then(() => toast('📋 Copied!'));
 }
 
-function showToast(msg) {
-  const toast = document.getElementById('toast');
-  toast.textContent = msg;
-  toast.classList.add('show');
-  clearTimeout(toast._timeout);
-  toast._timeout = setTimeout(() => toast.classList.remove('show'), 3000);
+document.getElementById('buy-modal').addEventListener('click', e => { if(e.target===e.currentTarget) closeBuyModal(); });
+document.getElementById('pd-modal').addEventListener('click', e => { if(e.target===e.currentTarget) closePdModal(); });
+
+/* ---- ADMIN ---- */
+function openAdmin() {
+  document.getElementById('admin-overlay').classList.add('active');
+  if (loggedIn) showDash();
+}
+function closeAdmin() { document.getElementById('admin-overlay').classList.remove('active'); }
+function checkPw() {
+  const v = document.getElementById('admin-pw').value;
+  if (v === ADMIN_PW) {
+    loggedIn = true;
+    document.getElementById('login-err').style.display = 'none';
+    document.getElementById('admin-pw').value = '';
+    showDash();
+  } else {
+    document.getElementById('login-err').style.display = 'block';
+    document.getElementById('admin-pw').value = '';
+  }
+}
+function showDash() {
+  document.getElementById('admin-login').style.display = 'none';
+  document.getElementById('admin-dash').style.display = 'block';
+  renderAdminList();
+}
+function adminLogout() {
+  loggedIn = false;
+  document.getElementById('admin-dash').style.display = 'none';
+  document.getElementById('admin-login').style.display = 'flex';
+  closeAdmin();
 }
 
-// init
-renderProducts();
+/* ---- IMAGE ---- */
+function previewImg(e) {
+  const f = e.target.files[0];
+  if (!f) return;
+  if (f.size > 5*1024*1024) { toast('❌ Image too large (max 5MB)', true); return; }
+  const r = new FileReader();
+  r.onload = ev => {
+    imgData = ev.target.result;
+    const el = document.getElementById('img-prev');
+    el.src = imgData; el.style.display = 'block';
+  };
+  r.readAsDataURL(f);
+}
+
+/* ---- ADD PRODUCT ---- */
+function addProduct() {
+  const name = document.getElementById('f-name').value.trim();
+  const price = parseFloat(document.getElementById('f-price').value);
+  const stock = parseInt(document.getElementById('f-stock').value);
+  const tag = document.getElementById('f-tag').value;
+  const desc = document.getElementById('f-desc').value.trim();
+  if (!name) { toast('❌ Name is required!', true); return; }
+  if (isNaN(price)||price<0) { toast('❌ Enter a valid price!', true); return; }
+  if (isNaN(stock)||stock<0) { toast('❌ Enter a valid stock number!', true); return; }
+  products.unshift({ id:Date.now(), name, price, stock, tag, desc, img:imgData||null });
+  save(); renderStore(); renderAdminList();
+  document.getElementById('f-name').value='';
+  document.getElementById('f-price').value='';
+  document.getElementById('f-stock').value='';
+  document.getElementById('f-desc').value='';
+  document.getElementById('f-img').value='';
+  document.getElementById('img-prev').style.display='none';
+  imgData=null;
+  toast(`✅ "${name}" added to the store!`);
+}
+
+/* ---- ADMIN LIST ---- */
+function renderAdminList() {
+  document.getElementById('prod-count').textContent = products.length;
+  const el = document.getElementById('admin-list');
+  if (!products.length) { el.innerHTML='<div class="no-products">No products yet. Add one above! ☝️</div>'; return; }
+  el.innerHTML = products.map(p => `
+    <div class="admin-item">
+      ${p.img?`<img class="admin-thumb" src="${p.img}" alt="${p.name}">`:`<div class="admin-thumb-placeholder">🧠</div>`}
+      <div class="admin-info">
+        <div class="admin-item-name">${p.name}</div>
+        <div class="admin-item-meta">€${(+p.price).toFixed(2)} · ${p.tag} · ${p.stock<=0?'❌ Out of stock':`✅ ${p.stock} in stock`}</div>
+      </div>
+      <div class="admin-actions">
+        <div class="stock-control">
+          <button class="stock-btn" onclick="changeStock(${p.id},-1)">−</button>
+          <span class="stock-num" id="sn-${p.id}">${p.stock}</span>
+          <button class="stock-btn" onclick="changeStock(${p.id},+1)">+</button>
+        </div>
+        <button class="delete-btn" onclick="delProduct(${p.id})">🗑 DELETE</button>
+      </div>
+    </div>`).join('');
+}
+
+function changeStock(id, d) {
+  const p = products.find(x=>x.id===id); if(!p) return;
+  p.stock = Math.max(0, p.stock+d);
+  save(); renderStore();
+  document.getElementById(`sn-${id}`).textContent = p.stock;
+  toast(`📦 ${p.name}: ${p.stock} in stock`);
+}
+function delProduct(id) {
+  const p = products.find(x=>x.id===id); if(!p) return;
+  if(!confirm(`Delete "${p.name}"? This cannot be undone.`)) return;
+  products = products.filter(x=>x.id!==id);
+  save(); renderStore(); renderAdminList();
+  toast(`🗑 "${p.name}" deleted.`);
+}
+
+/* ---- TOAST ---- */
+function toast(msg, err=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast'+(err?' err':'');
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(()=>t.classList.remove('show'), 3200);
+}
+
+renderStore();
 </script>
 </body>
 </html>
