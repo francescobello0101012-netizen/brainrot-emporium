@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BRAINROT EMPORIUM 🧠</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Russo+One&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --neon-purple: #bf00ff;
+    --neon-green: #39ff14;
+    --neon-pink: #ff006e;
+    --neon-yellow: #ffe600;
+    --neon-cyan: #00f5ff;
+    --bg-dark: #0a0010;
+    --bg-mid: #110020;
+    --card-bg: #1a0030;
+    --text-main: #f0e6ff;
+    --glitch-1: #ff006e;
+    --glitch-2: #00f5ff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Space Mono', monospace;
+    overflow-x: hidden;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='12' cy='12' r='8' fill='%23bf00ff' opacity='0.8'/%3E%3C/svg%3E") 12 12, auto;
+  }
+
+  /* ===== SCANLINES OVERLAY ===== */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.15) 2px,
+      rgba(0,0,0,0.15) 4px
+    );
+    pointer-events: none;
+    z-index: 9998;
+  }
+
+  /* ===== NOISE TEXTURE ===== */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9997;
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 40px;
+    background: rgba(10,0,16,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 2px solid var(--neon-purple);
+    box-shadow: 0 0 30px rgba(191,0,255,0.3);
+  }
+
+  .nav-logo {
+    font-family: 'Russo One', sans-serif;
+    font-size: 1.5rem;
+    color: var(--neon-green);
+    text-shadow: 0 0 10px var(--neon-green), 0 0 20px var(--neon-green);
+    letter-spacing: 2px;
+    animation: flicker 4s infinite;
+  }
+
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a {
+    color: var(--text-main);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: color 0.2s, text-shadow 0.2s;
+  }
+  .nav-links a:hover {
+    color: var(--neon-pink);
+    text-shadow: 0 0 8px var(--neon-pink);
+  }
+
+  .cart-btn {
+    background: var(--neon-purple);
+    color: #fff;
+    border: none;
+    padding: 10px 22px;
+    font-family: 'Boogaloo', cursive;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(191,0,255,0.6);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .cart-btn:hover {
+    transform: scale(1.08) rotate(-2deg);
+    box-shadow: 0 0 30px rgba(191,0,255,0.9);
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    padding: 120px 20px 60px;
+    overflow: hidden;
+  }
+
+  /* animated grid bg */
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(191,0,255,0.15) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(191,0,255,0.15) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: gridScroll 8s linear infinite;
+    perspective: 500px;
+    transform-style: preserve-3d;
+  }
+
+  @keyframes gridScroll {
+    0% { background-position: 0 0; }
+    100% { background-position: 50px 50px; }
+  }
+
+  /* floating orbs */
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.25;
+    animation: floatOrb 6s ease-in-out infinite;
+  }
+  .orb-1 { width: 400px; height: 400px; background: var(--neon-purple); top: -100px; left: -100px; }
+  .orb-2 { width: 300px; height: 300px; background: var(--neon-pink); bottom: -80px; right: 5%; animation-delay: -3s; }
+  .orb-3 { width: 250px; height: 250px; background: var(--neon-green); top: 40%; left: 60%; animation-delay: -1.5s; }
+
+  @keyframes floatOrb {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-30px) scale(1.05); }
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: var(--neon-green);
+    color: #000;
+    font-family: 'Boogaloo', cursive;
+    font-size: 0.9rem;
+    padding: 6px 18px;
+    border-radius: 50px;
+    margin-bottom: 24px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    animation: badgePulse 2s ease-in-out infinite;
+    position: relative;
+    z-index: 2;
+  }
+
+  @keyframes badgePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+  }
+
+  .hero-title {
+    font-family: 'Russo One', sans-serif;
+    font-size: clamp(3.5rem, 10vw, 9rem);
+    line-height: 0.95;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 20px;
+  }
+
+  .hero-title .line1 { color: var(--neon-pink); display: block; animation: glitchText 3s infinite; }
+  .hero-title .line2 { color: #fff; display: block; text-shadow: 0 0 40px rgba(255,255,255,0.3); }
+  .hero-title .line3 { color: var(--neon-green); display: block; animation: glitchText 3s 0.5s infinite; }
+
+  @keyframes glitchText {
+    0%, 90%, 100% { transform: none; text-shadow: none; }
+    92% { transform: skewX(-5deg) translateX(-4px); text-shadow: 4px 0 var(--glitch-2), -4px 0 var(--glitch-1); }
+    94% { transform: skewX(3deg) translateX(4px); text-shadow: -4px 0 var(--glitch-2), 4px 0 var(--glitch-1); }
+    96% { transform: none; text-shadow: none; }
+  }
+
+  .hero-sub {
+    font-size: clamp(0.9rem, 2vw, 1.2rem);
+    color: rgba(240,230,255,0.7);
+    max-width: 550px;
+    line-height: 1.7;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 40px;
+  }
+
+  .hero-cta-group {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .btn-primary {
+    font-family: 'Boogaloo', cursive;
+    font-size: 1.4rem;
+    padding: 16px 44px;
+    border: none;
+    border-radius: 60px;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+    color: #fff;
+    box-shadow: 0 0 30px rgba(255,0,110,0.5), 0 0 60px rgba(191,0,255,0.3);
+    transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(135deg, var(--neon-green), var(--neon-cyan), var(--neon-purple), var(--neon-pink));
+    border-radius: 60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: -1;
+  }
+  .btn-primary:hover { transform: scale(1.1) rotate(-1deg); box-shadow: 0 0 50px rgba(255,0,110,0.8); }
+
+  .btn-secondary {
+    font-family: 'Boogaloo', cursive;
+    font-size: 1.3rem;
+    padding: 16px 36px;
+    border: 2px solid var(--neon-cyan);
+    border-radius: 60px;
+    cursor: pointer;
+    background: transparent;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 8px var(--neon-cyan);
+    box-shadow: 0 0 15px rgba(0,245,255,0.3), inset 0 0 15px rgba(0,245,255,0.05);
+    transition: transform 0.2s, background 0.2s;
+  }
+  .btn-secondary:hover { transform: scale(1.07) rotate(1deg); background: rgba(0,245,255,0.1); }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: rgba(240,230,255,0.5);
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    z-index: 2;
+    animation: scrollBounce 2s ease-in-out infinite;
+  }
+  .scroll-arrow { font-size: 1.4rem; }
+  @keyframes scrollBounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* ===== MARQUEE ===== */
+  .marquee-wrap {
+    background: var(--neon-green);
+    padding: 14px 0;
+    overflow: hidden;
+    border-top: 3px solid #000;
+    border-bottom: 3px solid #000;
+  }
+  .marquee-track {
+    display: flex;
+    gap: 0;
+    white-space: nowrap;
+    animation: marquee 12s linear infinite;
+  }
+  .marquee-item {
+    font-family: 'Boogaloo', cursive;
+    font-size: 1.4rem;
+    color: #000;
+    padding: 0 30px;
+    letter-spacing: 1px;
+  }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ===== SECTION COMMON ===== */
+  section { padding: 100px 40px; }
+  .section-title {
+    font-family: 'Russo One', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .section-sub {
+    text-align: center;
+    color: rgba(240,230,255,0.6);
+    font-size: 0.9rem;
+    margin-bottom: 60px;
+    letter-spacing: 1px;
+  }
+
+  /* ===== PRODUCTS ===== */
+  .products { background: var(--bg-mid); }
+  .products .section-title { color: var(--neon-pink); text-shadow: 0 0 20px rgba(255,0,110,0.4); }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 28px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .product-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(191,0,255,0.3);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), border-color 0.3s, box-shadow 0.3s;
+  }
+  .product-card:hover {
+    transform: translateY(-12px) rotate(-1deg) scale(1.02);
+    border-color: var(--neon-purple);
+    box-shadow: 0 20px 60px rgba(191,0,255,0.4), 0 0 0 1px var(--neon-purple);
+  }
+  .product-card:nth-child(even):hover { transform: translateY(-12px) rotate(1deg) scale(1.02); }
+
+  .card-thumb {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .card-thumb::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, var(--card-bg));
+  }
+
+  .thumb-1 { background: linear-gradient(135deg, #1a0030, #3d0070); }
+  .thumb-2 { background: linear-gradient(135deg, #001a10, #003d25); }
+  .thumb-3 { background: linear-gradient(135deg, #200010, #500028); }
+  .thumb-4 { background: linear-gradient(135deg, #001a2a, #003d5a); }
+  .thumb-5 { background: linear-gradient(135deg, #1a1200, #4a3300); }
+  .thumb-6 { background: linear-gradient(135deg, #1a0020, #3d0050); }
+
+  .card-badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: var(--neon-pink);
+    color: #fff;
+    font-family: 'Boogaloo', cursive;
+    font-size: 0.85rem;
+    padding: 4px 12px;
+    border-radius: 50px;
+    z-index: 2;
+    animation: badgePulse 1.5s ease-in-out infinite;
+  }
+
+  .card-body { padding: 20px; }
+  .card-tag {
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--neon-purple);
+    margin-bottom: 8px;
+  }
+  .card-name {
+    font-family: 'Boogaloo', cursive;
+    font-size: 1.5rem;
+    margin-bottom: 6px;
+  }
+  .card-desc { font-size: 0.78rem; color: rgba(240,230,255,0.6); line-height: 1.6; margin-bottom: 18px; }
+  .card-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+
+  .card-price {
+    font-family: 'Russo One', sans-serif;
+    font-size: 1.4rem;
+    color: var(--neon-green);
+    text-shadow: 0 0 10px rgba(57,255,20,0.4);
+  }
+
+  .buy-btn {
+    font-family: 'Boogaloo', cursive;
+    font-size: 1.05rem;
+    padding: 10px 22px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink));
+    color: #fff;
+    box-shadow: 0 0 15px rgba(191,0,255,0.4);
+    transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s;
+    position: relative;
+  }
+  .buy-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 30px rgba(191,0,255,0.7);
+  }
+  .buy-btn:active { transform: scale(0.95); }
+
+  /* click ripple */
+  .buy-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50px;
+    background: rgba(255,255,255,0.2);
+    opacity: 0;
+    transition: opacity 0.1s;
+  }
+  .buy-btn:active::after { opacity: 1; }
+
+  /* ===== TRUST SECTION ===== */
+  .trust { background: var(--bg-dark); }
+  .trust .section-title { color: var(--neon-cyan); text-shadow: 0 0 20px rgba(0,245,255,0.4); }
+
+  .trust-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .trust-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(0,245,255,0.2);
+    border-radius: 20px;
+    padding: 36px 28px;
+    text-align: center;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .trust-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .trust-card:hover { transform: translateY(-8px); border-color: var(--neon-cyan); box-shadow: 0 10px 40px rgba(0,245,255,0.15); }
+  .trust-card:hover::before { opacity: 1; }
+
+  .trust-icon { font-size: 3rem; margin-bottom: 16px; display: block; }
+  .trust-label {
+    font-family: 'Boogaloo', cursive;
+    font-size: 1.3rem;
+    color: var(--neon-cyan);
+    margin-bottom: 10px;
+  }
+  .trust-text { font-size: 0.8rem; color: rgba(240,230,255,0.6); line-height: 1.7; }
+
+  /* ===== PAYMENT ===== */
+  .payment { background: var(--bg-mid); }
+  .payment .section-title { color: var(--neon-yellow); text-shadow: 0 0 20px rgba(255,230,0,0.4); }
+
+  .payment-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--card-bg);
+    border: 2px solid rgba(255,230,0,0.3);
+    border-radius: 28px;
+    padding: 50px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .payment-inner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(255,230,0,0.04) 0%, transparent 70%);
+  }
+
+  .payment-methods {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 32px 0;
+  }
+  .pay-pill {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 50px;
+    padding: 12px 24px;
+    font-family: 'Boogaloo', cursive;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .pay-pill:hover { transform: scale(1.06); border-color: var(--neon-yellow); }
+
+  .payment-note {
+    font-size: 0.8rem;
+    color: rgba(240,230,255,0.5);
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: #000;
+    border-top: 2px solid var(--neon-purple);
+    padding: 40px;
+    text-align: center;
+  }
+  .footer-logo {
+    font-family: 'Russo One', sans-serif;
+    font-size: 2rem;
+    color: var(--neon-purple);
+    text-shadow: 0 0 15px var(--neon-purple);
+    margin-bottom: 16px;
+  }
+  .footer-links { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin-bottom: 24px; }
+  .footer-links a { color: rgba(240,230,255,0.5); text-decoration: none; font-size: 0.75rem; letter-spacing: 1px; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--neon-pink); }
+  .footer-copy { font-size: 0.7rem; color: rgba(240,230,255,0.3); }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes flicker {
+    0%, 95%, 100% { opacity: 1; }
+    96% { opacity: 0.3; }
+    97% { opacity: 1; }
+    98% { opacity: 0.5; }
+    99% { opacity: 1; }
+  }
+
+  /* ===== MODAL CHECKOUT ===== */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(10px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .modal-overlay.active { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: var(--card-bg);
+    border: 2px solid var(--neon-purple);
+    border-radius: 28px;
+    padding: 40px;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 0 80px rgba(191,0,255,0.4);
+    transform: scale(0.9) translateY(20px);
+    transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
+    position: relative;
+  }
+  .modal-overlay.active .modal { transform: scale(1) translateY(0); }
+
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 20px;
+    background: none;
+    border: none;
+    color: rgba(240,230,255,0.5);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .modal-close:hover { color: var(--neon-pink); }
+
+  .modal-title {
+    font-family: 'Russo One', sans-serif;
+    font-size: 1.8rem;
+    color: var(--neon-green);
+    margin-bottom: 6px;
+  }
+  .modal-product { font-size: 0.85rem; color: rgba(240,230,255,0.6); margin-bottom: 30px; }
+
+  .checkout-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .checkout-option {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    padding: 16px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    color: var(--text-main);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+  }
+  .checkout-option:hover { border-color: var(--neon-purple); background: rgba(191,0,255,0.08); transform: translateX(4px); }
+  .checkout-option .method-icon { font-size: 1.8rem; }
+  .checkout-option .method-info { text-align: left; }
+  .checkout-option .method-name { font-family: 'Boogaloo', cursive; font-size: 1.1rem; }
+  .checkout-option .method-desc { font-size: 0.7rem; color: rgba(240,230,255,0.5); }
+
+  .modal-total {
+    border-top: 1px solid rgba(191,0,255,0.3);
+    padding-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .modal-total-label { font-size: 0.8rem; color: rgba(240,230,255,0.6); }
+  .modal-total-price { font-family: 'Russo One', sans-serif; font-size: 1.6rem; color: var(--neon-green); }
+
+  .confirm-btn {
+    width: 100%;
+    font-family: 'Boogaloo', cursive;
+    font-size: 1.3rem;
+    padding: 16px;
+    border: none;
+    border-radius: 60px;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+    color: #fff;
+    box-shadow: 0 0 30px rgba(191,0,255,0.5);
+    transition: transform 0.2s cubic-bezier(.34,1.56,.64,1);
+  }
+  .confirm-btn:hover { transform: scale(1.04); }
+
+  /* ===== TOAST ===== */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--neon-green);
+    color: #000;
+    font-family: 'Boogaloo', cursive;
+    font-size: 1.1rem;
+    padding: 16px 28px;
+    border-radius: 50px;
+    z-index: 99999;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(.34,1.56,.64,1), opacity 0.4s;
+    box-shadow: 0 0 30px rgba(57,255,20,0.5);
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    nav { padding: 12px 20px; }
+    .nav-links { display: none; }
+    section { padding: 70px 20px; }
+    .payment-inner { padding: 30px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">🧠 BRAINROT</div>
+  <ul class="nav-links">
+    <li><a href="#products">SHOP</a></li>
+    <li><a href="#trust">TRUST</a></li>
+    <li><a href="#payment">PAGAMENTI</a></li>
+  </ul>
+  <button class="cart-btn" onclick="showToast('🛒 Cart è vuoto... per ora!')">🛒 CARRELLO (0)</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="hero-badge">🔥 DROP LIMITATO — SKIBIDI EDITION</div>
+
+  <h1 class="hero-title">
+    <span class="line1">BRAINROT</span>
+    <span class="line2">EMPORIUM</span>
+    <span class="line3">™</span>
+  </h1>
+
+  <p class="hero-sub">
+    Asset per montaggi, meme pack e merch fisico per chi ha il cervello già fritto.
+    Prodotti di bassa lega ad altissima energia. ⚡
+  </p>
+
+  <div class="hero-cta-group">
+    <button class="btn-primary" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+      💀 SHOP ORA
+    </button>
+    <button class="btn-secondary" onclick="document.getElementById('trust').scrollIntoView({behavior:'smooth'})">
+      🔒 È SICURO?
+    </button>
+  </div>
+
+  <div class="hero-scroll">
+    <span class="scroll-arrow">↓</span>
+    <span>SCROLL</span>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">🧠 BRAINROT CERTIFIED</span>
+    <span class="marquee-item">💀 SIGMA PACK</span>
+    <span class="marquee-item">⚡ RIZZ OVERLOAD</span>
+    <span class="marquee-item">🎮 SKIBIDI ASSETS</span>
+    <span class="marquee-item">🔥 W RIZZ</span>
+    <span class="marquee-item">😤 NO CAP FR FR</span>
+    <span class="marquee-item">🧠 BRAINROT CERTIFIED</span>
+    <span class="marquee-item">💀 SIGMA PACK</span>
+    <span class="marquee-item">⚡ RIZZ OVERLOAD</span>
+    <span class="marquee-item">🎮 SKIBIDI ASSETS</span>
+    <span class="marquee-item">🔥 W RIZZ</span>
+    <span class="marquee-item">😤 NO CAP FR FR</span>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="products" id="products">
+  <h2 class="section-title">🛒 I PRODOTTI</h2>
+  <p class="section-sub">// ogni acquisto peggiora leggermente il tuo cervello. stai comprando consapevolmente.</p>
+
+  <div class="product-grid" id="product-grid"></div>
+</section>
+
+<!-- TRUST -->
+<section class="trust" id="trust">
+  <h2 class="section-title">🔒 PERCHÉ FIDARTI DI NOI</h2>
+  <p class="section-sub">// sì lo so, sembra uno scam. non lo è. quasi.</p>
+
+  <div class="trust-grid">
+    <div class="trust-card">
+      <span class="trust-icon">🔐</span>
+      <div class="trust-label">STRIPE SSL</div>
+      <p class="trust-text">I tuoi dati di pagamento vanno direttamente a Stripe, un colosso fintech da $65B. Noi non vediamo neanche il numero della tua carta. Giuro sul mio Wi-Fi.</p>
+    </div>
+    <div class="trust-card">
+      <span class="trust-icon">⚡</span>
+      <div class="trust-label">DOWNLOAD ISTANTANEO</div>
+      <p class="trust-text">Prodotti digitali consegnati in meno di 30 secondi dopo il pagamento. Più veloce della tua attention span su TikTok.</p>
+    </div>
+    <div class="trust-card">
+      <span class="trust-icon">🔁</span>
+      <div class="trust-label">RIMBORSO 7 GIORNI</div>
+      <p class="trust-text">Se gli asset fanno schifo (impossibile, ma ok), hai 7 giorni per chiedere i soldi indietro. Nessuna domanda. Beh, forse una.</p>
+    </div>
+    <div class="trust-card">
+      <span class="trust-icon">🕵️</span>
+      <div class="trust-label">ZERO SPAM</div>
+      <p class="trust-text">La tua email non viene venduta a nessuno. Non abbiamo neanche un CRM. Siamo troppo brainrotted per farlo funzionare.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PAYMENT -->
+<section class="payment" id="payment">
+  <h2 class="section-title">💳 COME PAGHI</h2>
+  <p class="section-sub">// accettiamo praticamente tutto tranne buoni pasto e speranza</p>
+
+  <div class="payment-inner">
+    <p style="font-family:'Boogaloo',cursive;font-size:1.2rem;margin-bottom:8px;color:rgba(240,230,255,0.8);">
+      Tutti i metodi passano per gateway certificati PCI-DSS Level 1. 
+      In italiano: roba seria, nessuno ti ruba i soldi.
+    </p>
+
+    <div class="payment-methods">
+      <div class="pay-pill">💳 Stripe</div>
+      <div class="pay-pill">🅿️ PayPal</div>
+      <div class="pay-pill">🏦 Bonifico IBAN</div>
+      <div class="pay-pill">🟡 Skrill</div>
+      <div class="pay-pill">🍎 Apple Pay</div>
+      <div class="pay-pill">🔵 Google Pay</div>
+    </div>
+
+    <p class="payment-note">
+      Per i prodotti digitali utilizziamo <strong style="color:var(--neon-yellow)">Stripe Checkout</strong> — si apre una pagina sicura di Stripe, paghi, ricevi il download link via email. 
+      Semplice come un meme. Sicuro come un bunker nucleare. 🏦
+    </p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">🧠 BRAINROT EMPORIUM™</div>
+  <div class="footer-links">
+    <a href="#">Privacy Policy</a>
+    <a href="#">Termini di Servizio</a>
+    <a href="#">Rimborsi</a>
+    <a href="#">Contatti</a>
+    <a href="#">Affiliati</a>
+  </div>
+  <p class="footer-copy">© 2025 Brainrot Emporium. Tutti i diritti riservati. Il tuo cervello no.</p>
+</footer>
+
+<!-- MODAL CHECKOUT -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModalBtn()">✕</button>
+    <div class="modal-title">💳 CHECKOUT</div>
+    <div class="modal-product" id="modal-product-name">Caricamento...</div>
+
+    <div class="checkout-methods">
+      <div class="checkout-option" onclick="selectPayment('stripe')">
+        <span class="method-icon">💳</span>
+        <div class="method-info">
+          <div class="method-name">Stripe (Carta di Credito)</div>
+          <div class="method-desc">Visa, Mastercard, AMEX — sicuro e veloce</div>
+        </div>
+      </div>
+      <div class="checkout-option" onclick="selectPayment('paypal')">
+        <span class="method-icon">🅿️</span>
+        <div class="method-info">
+          <div class="method-name">PayPal</div>
+          <div class="method-desc">Paga con il tuo account PayPal</div>
+        </div>
+      </div>
+      <div class="checkout-option" onclick="selectPayment('skrill')">
+        <span class="method-icon">🟡</span>
+        <div class="method-info">
+          <div class="method-name">Skrill</div>
+          <div class="method-desc">Wallet digitale internazionale</div>
+        </div>
+      </div>
+      <div class="checkout-option" onclick="selectPayment('iban')">
+        <span class="method-icon">🏦</span>
+        <div class="method-info">
+          <div class="method-name">Bonifico IBAN</div>
+          <div class="method-desc">IT60 X054 2811 1010 0000 0123 456 — 2-3 giorni lavorativi</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-total">
+      <span class="modal-total-label">TOTALE</span>
+      <span class="modal-total-price" id="modal-price">€0.00</span>
+    </div>
+
+    <button class="confirm-btn" onclick="confirmPayment()">🚀 CONFERMA ACQUISTO</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const products = [
+  {
+    id: 1,
+    emoji: '💀',
+    thumb: 'thumb-1',
+    tag: 'DIGITAL PACK',
+    name: 'Sigma Rizz Pack',
+    desc: '500+ clip brainrot ready-to-use. Skibidi, Ohio edits, transition glitch. Formato MP4 4K. Il tuo montaggio non sarà mai più lo stesso (in peggio).',
+    price: 12.99,
+    badge: '🔥 BESTSELLER'
+  },
+  {
+    id: 2,
+    emoji: '🎮',
+    thumb: 'thumb-2',
+    tag: 'MEME PACK',
+    name: 'No Cap Meme Bundle',
+    desc: '1000+ template PNG/PSD ad altissima energia. Formati IG, TikTok, YouTube Shorts. No watermark, no license drama.',
+    price: 7.99,
+    badge: null
+  },
+  {
+    id: 3,
+    emoji: '⚡',
+    thumb: 'thumb-3',
+    tag: 'SOUND EFFECTS',
+    name: 'Brainrot SFX Kit',
+    desc: '200+ effetti sonori: Ohio audio, bass drops, tuba meme, fart reverb. WAV 48kHz. Compatibile Premiere, DaVinci, CapCut.',
+    price: 9.99,
+    badge: '⚡ NEW'
+  },
+  {
+    id: 4,
+    emoji: '🧢',
+    thumb: 'thumb-4',
+    tag: 'MERCH FISICO',
+    name: 'Cappellino Sigma',
+    desc: 'Cappellino ricamato "Sigma Grindset". Taglia unica. Spedizione EU 5-7 giorni. Ti rende automaticamente il più ganzo del gruppo.',
+    price: 24.99,
+    badge: null
+  },
+  {
+    id: 5,
+    emoji: '🎨',
+    thumb: 'thumb-5',
+    tag: 'PRESET PACK',
+    name: 'Chaos LUT Bundle',
+    desc: 'LUT cinematic con vibe brainrot. Saturazione estrema, grana film, tone mapping chaotic. 30 preset LUT .cube per qualsiasi editor.',
+    price: 5.99,
+    badge: '💸 OFFERTA'
+  },
+  {
+    id: 6,
+    emoji: '👕',
+    thumb: 'thumb-6',
+    tag: 'MERCH FISICO',
+    name: 'T-Shirt Ohio Mode',
+    desc: '"Ohio Mode: ON" stampato su cotone 100% biologico. Perché anche il brainrot può essere sostenibile. S/M/L/XL/XXL.',
+    price: 29.99,
+    badge: null
+  }
+];
+
+let currentProduct = null;
+
+function renderProducts() {
+  const grid = document.getElementById('product-grid');
+  grid.innerHTML = products.map(p => `
+    <div class="product-card">
+      ${p.badge ? `<div class="card-badge">${p.badge}</div>` : ''}
+      <div class="card-thumb ${p.thumb}">
+        <span>${p.emoji}</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">${p.tag}</div>
+        <div class="card-name">${p.name}</div>
+        <p class="card-desc">${p.desc}</p>
+        <div class="card-footer">
+          <span class="card-price">€${p.price.toFixed(2)}</span>
+          <button class="buy-btn" onclick="openModal(${p.id})">🛒 COMPRA</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openModal(productId) {
+  currentProduct = products.find(p => p.id === productId);
+  document.getElementById('modal-product-name').textContent = `📦 ${currentProduct.name}`;
+  document.getElementById('modal-price').textContent = `€${currentProduct.price.toFixed(2)}`;
+  document.getElementById('modal-overlay').classList.add('active');
+}
+
+function closeModalBtn() {
+  document.getElementById('modal-overlay').classList.remove('active');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModalBtn();
+}
+
+function selectPayment(method) {
+  const labels = {
+    stripe: 'Stripe Checkout',
+    paypal: 'PayPal',
+    skrill: 'Skrill',
+    iban: 'Bonifico IBAN'
+  };
+  showToast(`✅ Metodo selezionato: ${labels[method]}`);
+}
+
+function confirmPayment() {
+  if (!currentProduct) return;
+  closeModalBtn();
+  // In produzione: window.location.href = stripeCheckoutUrl
+  showToast(`🚀 Redirecting a Stripe Checkout per "${currentProduct.name}"...`);
+  setTimeout(() => {
+    showToast('✅ Pagamento completato! Controlla la tua email. 🧠');
+  }, 2500);
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// init
+renderProducts();
+</script>
+</body>
+</html>
