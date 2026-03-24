@@ -97,6 +97,10 @@ section { padding:90px 40px; }
 .empty-store { text-align:center; padding:60px 20px; color:rgba(240,230,255,0.4); grid-column:1/-1; }
 .empty-store .empty-icon { font-size:4rem; margin-bottom:16px; }
 .empty-store p { font-family:'Boogaloo',cursive; font-size:1.3rem; }
+.loading-store { text-align:center; padding:60px 20px; color:rgba(240,230,255,0.4); grid-column:1/-1; }
+.loading-store .loading-icon { font-size:3rem; margin-bottom:16px; animation:spin 1s linear infinite; display:inline-block; }
+@keyframes spin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+.loading-store p { font-family:'Boogaloo',cursive; font-size:1.3rem; }
 .product-card { background:var(--card-bg); border:1px solid rgba(191,0,255,0.25); border-radius:20px; overflow:hidden; position:relative; transition:transform 0.3s cubic-bezier(.34,1.56,.64,1),border-color 0.3s,box-shadow 0.3s; }
 .product-card:not(.sold-out):hover { transform:translateY(-10px) rotate(-1deg) scale(1.02); border-color:var(--neon-purple); box-shadow:0 20px 50px rgba(191,0,255,0.35); }
 .product-card:not(.sold-out):nth-child(even):hover { transform:translateY(-10px) rotate(1deg) scale(1.02); }
@@ -215,6 +219,7 @@ footer { background:#000; border-top:2px solid var(--neon-purple); padding:36px 
 .img-preview { width:100%; max-height:160px; object-fit:cover; border-radius:10px; display:none; margin-top:12px; }
 .add-btn { width:100%; margin-top:20px; font-family:'Boogaloo',cursive; font-size:1.3rem; padding:14px; border:none; border-radius:50px; cursor:pointer; background:linear-gradient(135deg,var(--neon-purple),var(--neon-pink)); color:#fff; box-shadow:0 0 20px rgba(191,0,255,0.4); transition:transform 0.2s,box-shadow 0.2s; }
 .add-btn:hover { transform:scale(1.03); box-shadow:0 0 35px rgba(191,0,255,0.7); }
+.add-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
 .list-title { font-family:'Boogaloo',cursive; font-size:1.6rem; color:var(--neon-cyan); margin-bottom:20px; }
 .admin-list { display:flex; flex-direction:column; gap:14px; }
 .admin-item { background:rgba(255,255,255,0.03); border:1px solid rgba(0,245,255,0.15); border-radius:16px; padding:18px 22px; display:flex; align-items:center; gap:18px; transition:border-color 0.2s; }
@@ -232,6 +237,10 @@ footer { background:#000; border-top:2px solid var(--neon-purple); padding:36px 
 .delete-btn { padding:8px 16px; border:1px solid rgba(255,0,110,0.3); border-radius:50px; background:transparent; color:var(--neon-pink); font-family:'Space Mono',monospace; font-size:0.7rem; cursor:pointer; letter-spacing:1px; transition:border-color 0.2s,background 0.2s; }
 .delete-btn:hover { border-color:var(--neon-pink); background:rgba(255,0,110,0.1); }
 .no-products { text-align:center; padding:40px; color:rgba(240,230,255,0.35); font-family:'Boogaloo',cursive; font-size:1.2rem; }
+.sync-status { font-size:0.65rem; color:rgba(240,230,255,0.35); text-align:center; margin-top:8px; letter-spacing:1px; }
+.sync-status.syncing { color:var(--neon-yellow); }
+.sync-status.ok { color:var(--neon-green); }
+.sync-status.err { color:var(--neon-pink); }
 
 /* TOAST */
 .toast { position:fixed; bottom:28px; right:28px; background:var(--neon-green); color:#000; font-family:'Boogaloo',cursive; font-size:1.1rem; padding:14px 26px; border-radius:50px; z-index:9999; transform:translateY(100px); opacity:0; transition:transform 0.4s cubic-bezier(.34,1.56,.64,1),opacity 0.4s; box-shadow:0 0 30px rgba(57,255,20,0.5); }
@@ -292,7 +301,9 @@ footer { background:#000; border-top:2px solid var(--neon-purple); padding:36px 
 <section class="products" id="products">
   <h2 class="section-title">🛒 THE SHOP</h2>
   <p class="section-sub">// every purchase slightly worsens your brain. you're buying knowingly.</p>
-  <div class="product-grid" id="product-grid"></div>
+  <div class="product-grid" id="product-grid">
+    <div class="loading-store"><div class="loading-icon">⚡</div><p>Loading the drip...</p></div>
+  </div>
 </section>
 
 <!-- TRUST -->
@@ -332,7 +343,7 @@ footer { background:#000; border-top:2px solid var(--neon-purple); padding:36px 
   <p class="footer-copy">© 2025 Brainrot Emporium. All rights reserved. Your brain however is not.</p>
 </footer>
 
-<!-- BUY MODAL: choose method -->
+<!-- BUY MODAL -->
 <div class="modal-overlay" id="buy-modal">
   <div class="modal">
     <button class="modal-close" onclick="closeBuyModal()">✕</button>
@@ -379,7 +390,6 @@ footer { background:#000; border-top:2px solid var(--neon-purple); padding:36px 
 
 <!-- ADMIN OVERLAY -->
 <div class="admin-overlay" id="admin-overlay">
-  <!-- LOGIN -->
   <div class="admin-login" id="admin-login">
     <div class="login-box">
       <div class="login-icon">🔐</div>
@@ -391,14 +401,12 @@ footer { background:#000; border-top:2px solid var(--neon-purple); padding:36px 
       <button onclick="closeAdmin()" style="margin-top:16px;background:none;border:none;color:rgba(240,230,255,0.4);font-size:0.75rem;cursor:pointer;letter-spacing:1px;">← BACK TO SITE</button>
     </div>
   </div>
-  <!-- DASHBOARD -->
   <div class="admin-dashboard" id="admin-dash">
     <div class="admin-panel">
       <div class="admin-header">
         <div class="admin-title">⚙️ ADMIN PANEL</div>
         <button class="admin-logout" onclick="adminLogout()">🚪 LOGOUT</button>
       </div>
-      <!-- ADD FORM -->
       <div class="add-section">
         <div class="add-title">➕ Add New Product</div>
         <div class="form-grid">
@@ -422,14 +430,14 @@ footer { background:#000; border-top:2px solid var(--neon-purple); padding:36px 
             <div class="img-upload-area">
               <input type="file" accept="image/*" id="f-img" onchange="previewImg(event)">
               <div class="img-upload-icon">📸</div>
-              <div class="img-upload-text">Click or drag image here<br><span style="color:rgba(240,230,255,0.3);font-size:0.7rem">PNG, JPG, WEBP — max 5MB</span></div>
+              <div class="img-upload-text">Click or drag image here<br><span style="color:rgba(240,230,255,0.3);font-size:0.7rem">PNG, JPG, WEBP — max 2MB (consigliato)</span></div>
               <img class="img-preview" id="img-prev" alt="preview">
             </div>
           </div>
         </div>
-        <button class="add-btn" onclick="addProduct()">💾 ADD TO STORE</button>
+        <button class="add-btn" id="add-btn" onclick="addProduct()">💾 ADD TO STORE</button>
+        <div class="sync-status" id="sync-status"></div>
       </div>
-      <!-- LIST -->
       <div class="list-title">📦 Your Products (<span id="prod-count">0</span>)</div>
       <div class="admin-list" id="admin-list"></div>
     </div>
@@ -440,15 +448,79 @@ footer { background:#000; border-top:2px solid var(--neon-purple); padding:36px 
 <div class="toast" id="toast"></div>
 
 <script>
-const ADMIN_PW = 'brainrot2025'; // ← CHANGE THIS PASSWORD!
-let products = JSON.parse(localStorage.getItem('be_v2') || '[]');
+// ============================================================
+// CONFIG JSONBIN
+// ============================================================
+const BIN_ID = '69c23029b7ec241ddc995367';
+const API_KEY = '$2a$10$2WMg33DtxSFyF2XFd/IUkOoJaYgj7I1sHkWIA0yJw2y5X9JN./Z.O';
+const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+const HEADERS = {
+  'Content-Type': 'application/json',
+  'X-Master-Key': API_KEY,
+  'X-Bin-Meta': 'false'
+};
+
+const ADMIN_PW = 'brainrot2025'; // ← CAMBIA QUESTA PASSWORD!
+
+let products = [];
 let currentProduct = null;
 let imgData = null;
 let loggedIn = false;
+let pollInterval = null;
 
-function save() { localStorage.setItem('be_v2', JSON.stringify(products)); }
+// ============================================================
+// JSONBIN API
+// ============================================================
+async function loadProducts() {
+  try {
+    const r = await fetch(BIN_URL, { headers: HEADERS });
+    if (!r.ok) throw new Error('fetch failed');
+    const data = await r.json();
+    // JSONBin restituisce {record: [...]} oppure direttamente l'array
+    const raw = data.record !== undefined ? data.record : data;
+    products = Array.isArray(raw.products) ? raw.products : (Array.isArray(raw) ? raw : []);
+    renderStore();
+    if (loggedIn) renderAdminList();
+  } catch(e) {
+    console.error('Errore caricamento prodotti:', e);
+  }
+}
 
-/* ---- STORE ---- */
+async function saveProducts() {
+  setSyncStatus('syncing', '⏳ Saving...');
+  try {
+    const r = await fetch(BIN_URL, {
+      method: 'PUT',
+      headers: HEADERS,
+      body: JSON.stringify({ products })
+    });
+    if (!r.ok) throw new Error('save failed');
+    setSyncStatus('ok', '✅ Saved!');
+    setTimeout(() => setSyncStatus('', ''), 2500);
+    return true;
+  } catch(e) {
+    setSyncStatus('err', '❌ Save error — retry');
+    console.error('Errore salvataggio:', e);
+    return false;
+  }
+}
+
+function setSyncStatus(type, msg) {
+  const el = document.getElementById('sync-status');
+  if (!el) return;
+  el.textContent = msg;
+  el.className = 'sync-status' + (type ? ' ' + type : '');
+}
+
+// Polling ogni 10 secondi per aggiornare lo store in tempo reale
+function startPolling() {
+  if (pollInterval) clearInterval(pollInterval);
+  pollInterval = setInterval(loadProducts, 10000);
+}
+
+// ============================================================
+// STORE RENDER
+// ============================================================
 function renderStore() {
   const g = document.getElementById('product-grid');
   if (!products.length) {
@@ -476,7 +548,9 @@ function renderStore() {
   }).join('');
 }
 
-/* ---- BUY MODAL ---- */
+// ============================================================
+// BUY MODAL
+// ============================================================
 function openBuy(id) {
   currentProduct = products.find(p => p.id === id);
   if (!currentProduct) return;
@@ -494,7 +568,6 @@ function showPaymentDetail(method) {
   const p = currentProduct;
   const price = `€${(+p.price).toFixed(2)}`;
   let title, body, note;
-
   if (method === 'paypal') {
     title = '🅿️ PayPal Payment';
     body = `<div class="pd-box" style="background:rgba(0,112,240,0.08);border:1px solid rgba(0,112,240,0.3)">
@@ -528,9 +601,8 @@ function showPaymentDetail(method) {
       <div class="pd-label" style="margin-top:16px">Reason / Causale</div>
       <div class="pd-value" style="font-size:0.9rem">${p.name} - Brainrot Emporium</div>
     </div>`;
-    note = '⏱ Bank transfers take 2-3 business days. After sending, email francescobello0101012@gmail.com with your confirmation and product name. We ship within 24h of confirmation.';
+    note = '⏱ Bank transfers take 2-3 business days. After sending, email francescobello0101012@gmail.com with your confirmation and product name.';
   }
-
   document.getElementById('pd-title').textContent = title;
   document.getElementById('pd-body').innerHTML = body;
   document.getElementById('pd-note').textContent = note;
@@ -538,15 +610,14 @@ function showPaymentDetail(method) {
   document.getElementById('pd-modal').classList.add('active');
 }
 function closePdModal() { document.getElementById('pd-modal').classList.remove('active'); }
-
-function copyText(text) {
-  navigator.clipboard.writeText(text).then(() => toast('📋 Copied!'));
-}
+function copyText(text) { navigator.clipboard.writeText(text).then(() => toast('📋 Copied!')); }
 
 document.getElementById('buy-modal').addEventListener('click', e => { if(e.target===e.currentTarget) closeBuyModal(); });
 document.getElementById('pd-modal').addEventListener('click', e => { if(e.target===e.currentTarget) closePdModal(); });
 
-/* ---- ADMIN ---- */
+// ============================================================
+// ADMIN
+// ============================================================
 function openAdmin() {
   document.getElementById('admin-overlay').classList.add('active');
   if (loggedIn) showDash();
@@ -576,7 +647,9 @@ function adminLogout() {
   closeAdmin();
 }
 
-/* ---- IMAGE ---- */
+// ============================================================
+// IMAGE
+// ============================================================
 function previewImg(e) {
   const f = e.target.files[0];
   if (!f) return;
@@ -590,8 +663,10 @@ function previewImg(e) {
   r.readAsDataURL(f);
 }
 
-/* ---- ADD PRODUCT ---- */
-function addProduct() {
+// ============================================================
+// ADD PRODUCT
+// ============================================================
+async function addProduct() {
   const name = document.getElementById('f-name').value.trim();
   const price = parseFloat(document.getElementById('f-price').value);
   const stock = parseInt(document.getElementById('f-stock').value);
@@ -600,19 +675,37 @@ function addProduct() {
   if (!name) { toast('❌ Name is required!', true); return; }
   if (isNaN(price)||price<0) { toast('❌ Enter a valid price!', true); return; }
   if (isNaN(stock)||stock<0) { toast('❌ Enter a valid stock number!', true); return; }
-  products.unshift({ id:Date.now(), name, price, stock, tag, desc, img:imgData||null });
-  save(); renderStore(); renderAdminList();
-  document.getElementById('f-name').value='';
-  document.getElementById('f-price').value='';
-  document.getElementById('f-stock').value='';
-  document.getElementById('f-desc').value='';
-  document.getElementById('f-img').value='';
-  document.getElementById('img-prev').style.display='none';
-  imgData=null;
-  toast(`✅ "${name}" added to the store!`);
+
+  const btn = document.getElementById('add-btn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Saving...';
+
+  products.unshift({ id: Date.now(), name, price, stock, tag, desc, img: imgData||null });
+  const ok = await saveProducts();
+
+  if (ok) {
+    renderStore();
+    renderAdminList();
+    document.getElementById('f-name').value='';
+    document.getElementById('f-price').value='';
+    document.getElementById('f-stock').value='';
+    document.getElementById('f-desc').value='';
+    document.getElementById('f-img').value='';
+    document.getElementById('img-prev').style.display='none';
+    imgData=null;
+    toast(`✅ "${name}" added to the store!`);
+  } else {
+    products.shift(); // rollback
+    toast('❌ Error saving. Try again!', true);
+  }
+
+  btn.disabled = false;
+  btn.textContent = '💾 ADD TO STORE';
 }
 
-/* ---- ADMIN LIST ---- */
+// ============================================================
+// ADMIN LIST
+// ============================================================
 function renderAdminList() {
   document.getElementById('prod-count').textContent = products.length;
   const el = document.getElementById('admin-list');
@@ -635,22 +728,28 @@ function renderAdminList() {
     </div>`).join('');
 }
 
-function changeStock(id, d) {
+async function changeStock(id, d) {
   const p = products.find(x=>x.id===id); if(!p) return;
   p.stock = Math.max(0, p.stock+d);
-  save(); renderStore();
+  renderStore();
   document.getElementById(`sn-${id}`).textContent = p.stock;
-  toast(`📦 ${p.name}: ${p.stock} in stock`);
+  const ok = await saveProducts();
+  if (ok) toast(`📦 ${p.name}: ${p.stock} in stock`);
+  else { p.stock -= d; renderStore(); toast('❌ Error saving', true); }
 }
-function delProduct(id) {
+
+async function delProduct(id) {
   const p = products.find(x=>x.id===id); if(!p) return;
   if(!confirm(`Delete "${p.name}"? This cannot be undone.`)) return;
   products = products.filter(x=>x.id!==id);
-  save(); renderStore(); renderAdminList();
-  toast(`🗑 "${p.name}" deleted.`);
+  const ok = await saveProducts();
+  if (ok) { renderStore(); renderAdminList(); toast(`🗑 "${p.name}" deleted.`); }
+  else { toast('❌ Error deleting', true); await loadProducts(); }
 }
 
-/* ---- TOAST ---- */
+// ============================================================
+// TOAST
+// ============================================================
 function toast(msg, err=false) {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -660,7 +759,11 @@ function toast(msg, err=false) {
   t._t = setTimeout(()=>t.classList.remove('show'), 3200);
 }
 
-renderStore();
+// ============================================================
+// INIT
+// ============================================================
+loadProducts();
+startPolling();
 </script>
 </body>
 </html>
